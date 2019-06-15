@@ -127,8 +127,4 @@ namespace cryonero
 		const char *hash;
 	};
 
-	# constexpr const CheckpointData CHECKPOINTS[] =
-	# {
-	#	{, ""}
-	# };
 }
