@@ -51,7 +51,7 @@ To go futher you have to have a number of packages and utilities. You need at le
 
 Git-clone (or git-pull) cryonero Core source code in that folder:
 ```
-$cryonerodev> git clone https://github.com/CryoNero/cryonero
+$cryonerodev> git clone https://github.com/CryoNero/CryoNero.git
 ```
 
 Put LMDB source code in `cryonerodev` folder (source files are referenced via relative paths, so you do not need to separately build it):
@@ -110,7 +110,7 @@ $~/Downloads> cd <path-to-cryonero-folder>
 
 Git-clone (or git-pull) cryonero Core source code in that folder:
 ```
-$cryonerodev> git clone https://github.com/CryoNero/cryonero.git
+$cryonerodev> git clone https://github.com/CryoNero/CryoNero.git
 ```
 
 Put LMDB source code in `cryonerodev` folder (source files are referenced via relative paths, so you do not need to separately build it):
@@ -198,7 +198,7 @@ cd ..
 
 Git-clone (or git-pull) cryonero Core source code in that folder:
 ```
-$C:\cryonerodev> git clone https://github.com/CryoNero/cryonero.git
+$C:\cryonerodev> git clone https://github.com/CryoNero/CryoNero.git
 ```
 
 Put LMDB in the same folder (source files are referenced via relative paths, so you do not need to separately build it):
