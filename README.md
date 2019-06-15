@@ -108,7 +108,7 @@ $~/Downloads> mkdir <path-to-cryonero-folder>
 $~/Downloads> cd <path-to-cryonero-folder>
 ```
 
-Git-clone (or git-pull) cryonero Core source code in that folder:
+Git-clone (or git-pull) CryoNero Core source code in that folder:
 ```
 $cryonerodev> git clone https://github.com/CryoNero/CryoNero.git
 ```
