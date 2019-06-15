@@ -129,6 +129,6 @@ namespace cryonero
 
 	constexpr const CheckpointData CHECKPOINTS[] =
 	{
-		{,""}
+	//	{,""}
 	 };
 }
