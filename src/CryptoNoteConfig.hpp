@@ -118,7 +118,7 @@ namespace cryonero
 
 	const char *const SEED_NODES[] =
 	{
-		""
+		"127.0.0.1:19785"
 	};
 
 	struct CheckpointData
