@@ -118,7 +118,7 @@ namespace cryonero
 
 	const char *const SEED_NODES[] =
 	{
-		"",
+		""
 	};
 
 	struct CheckpointData
@@ -127,4 +127,8 @@ namespace cryonero
 		const char *hash;
 	};
 
+	constexpr const CheckpointData CHECKPOINTS[] =
+	{
+		{""}
+	 };
 }
