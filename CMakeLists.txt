@@ -67,7 +67,7 @@ if(USE_SSL)
 else()
     message(STATUS "SSL usage: OFF")
 endif()
-file(GLOB SRC_CRYONERO src/naza/*.cpp src/cryonero/*.hpp)
+file(GLOB SRC_CRYONERO src/cryonero/*.cpp src/cryonero/*.hpp)
 file(GLOB SRC_CRYPTO
     src/crypto/*.cpp src/crypto/*.hpp src/crypto/*.h
     src/crypto/blake256.c
