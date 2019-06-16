@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -11,17 +11,17 @@
 #include <limits>
 
 
-namespace cryonero
+namespace nazacoin
 {
 	namespace parameters
 	{
 
-		const uint64_t CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 0x2756;
+		const uint64_t CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 126;
 
-		const uint32_t DIFFICULTY_TARGET = 120;
-		const uint64_t DIFFICULTY_WINDOW_V2 = 120;
+		const uint32_t DIFFICULTY_TARGET = 60;
+		const uint64_t DIFFICULTY_WINDOW_V2 = 60;
 		const uint64_t DIFFICULTY_BLOCKS_COUNT_V2 = DIFFICULTY_WINDOW_V2 + 1;
-		const uint64_t DIFFICULTY_SCATTER_V2 = 60;
+		const uint64_t DIFFICULTY_SCATTER_V2 = 32;
 
 
 		const uint32_t BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW_V2 = 11;
@@ -89,7 +89,7 @@ namespace cryonero
 		const char CRYPTONOTE_BLOCKINDEXES_FILENAME[] = "blockindexes.bin";
 	}  // parameters
 
-	const char CRYPTONOTE_NAME[] = "cryonero";
+	const char CRYPTONOTE_NAME[] = "naza";
 
 	const uint8_t CURRENT_TRANSACTION_VERSION = 1;
 
@@ -97,9 +97,9 @@ namespace cryonero
 	const size_t BLOCKS_SYNCHRONIZING_DEFAULT_COUNT = 100;
 	const size_t COMMAND_RPC_GET_BLOCKS_FAST_MAX_COUNT = 1000;
 
-	const int P2P_DEFAULT_PORT = 19785;
-	const int RPC_DEFAULT_PORT = 19786;
-	const int WALLET_RPC_DEFAULT_PORT = 19787;
+	const int P2P_DEFAULT_PORT = 18640;
+	const int RPC_DEFAULT_PORT = 18641;
+	const int WALLET_RPC_DEFAULT_PORT = 18642;
 
 	const size_t P2P_LOCAL_WHITE_PEERLIST_LIMIT = 1000;
 	const size_t P2P_LOCAL_GRAY_PEERLIST_LIMIT = 5000;
@@ -118,7 +118,10 @@ namespace cryonero
 
 	const char *const SEED_NODES[] =
 	{
-		"127.0.0.1:19785"
+		"104.168.153.55:18640",
+		"104.168.151.101:18640",
+		"104.168.144.151:18640",
+		"104.168.144.234:18640"
 	};
 
 	struct CheckpointData
@@ -129,6 +132,10 @@ namespace cryonero
 
 	constexpr const CheckpointData CHECKPOINTS[] =
 	{
-	//	{7110,""}
-	 };
+		{7100, "57319d5fda1e7c573abaa9b75bffbb02ead36b6f9a84fd9557cdfa22de071f16"},
+		{15000, "76f1ac86b83c4faedd9fd6b16789e59a477ceb7faa0188aa7a48cd1b7032f905"},
+		{20000, "750b7d1699fc8b770133863205bf5460e3278d47e306430596935dd98c793a0e"},
+		{30000, "9eeacb09ea68f9d40570dffefba8fe385bccd605e9e1fda45dff937027b3c336"},
+		{80000, "10274d477f19178dde88d4f199240f090273b4aadcb5f6f24fbfde3ec4cdc28d" }
+	};
 }

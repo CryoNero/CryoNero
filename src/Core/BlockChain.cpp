@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "BlockChain.hpp"
@@ -21,7 +21,7 @@
 #include "seria/BinaryInputStream.hpp"
 #include "seria/BinaryOutputStream.hpp"
 
-using namespace cryonero;
+using namespace nazacoin;
 using namespace platform;
 
 const std::string BlockChain::version_current = "5";
@@ -84,26 +84,26 @@ PreparedBlock::PreparedBlock(BinaryArray &&ba, crypto::CryptoNightContext *conte
 {
 	seria::from_binary(raw_block, block_data);
 	if (block.from_raw_block(raw_block))
-		bid = cryonero::get_block_hash(block.header);
+		bid = nazacoin::get_block_hash(block.header);
 	if (block.header.major_version >= 2)
 		parent_block_size = seria::binary_size(block.header.parent_block);
 	coinbase_tx_size = seria::binary_size(block.header.base_transaction);
 	base_transaction_hash = get_transaction_hash(block.header.base_transaction);
 	if (context)
-		long_block_hash = cryonero::get_block_long_hash(block.header, *context);
+		long_block_hash = nazacoin::get_block_long_hash(block.header, *context);
 }
 
 PreparedBlock::PreparedBlock(RawBlock &&rba, crypto::CryptoNightContext *context) : raw_block(rba) 
 {
 	block_data = seria::to_binary(raw_block);
 	if (block.from_raw_block(raw_block))
-		bid = cryonero::get_block_hash(block.header);
+		bid = nazacoin::get_block_hash(block.header);
 	if (block.header.major_version >= 2)
 		parent_block_size = seria::binary_size(block.header.parent_block);
 	coinbase_tx_size = seria::binary_size(block.header.base_transaction);
 	base_transaction_hash = get_transaction_hash(block.header.base_transaction);
 	if (context)
-		long_block_hash = cryonero::get_block_long_hash(block.header, *context);
+		long_block_hash = nazacoin::get_block_long_hash(block.header, *context);
 }
 
 BlockChain::BlockChain(logging::ILogger &log, const Config &config, const Currency &currency, bool read_only)
@@ -198,7 +198,7 @@ BroadcastAction BlockChain::add_block(
 	catch (const std::exception &ex)
 	{
 		m_log(logging::ERROR) << "Exception while reorganizing blockchain, probably out of disk space ex.what=" << ex.what() << ", " << delete_blockchain_message << m_db.get_path() << std::endl;
-		std::exit(api::cryonerod_DATABASE_ERROR);
+		std::exit(api::NAZAD_DATABASE_ERROR);
 	}
 	if (get_tip_height() % COMMIT_EVERY_N_BLOCKS == COMMIT_EVERY_N_BLOCKS - 1) 
 		db_commit();

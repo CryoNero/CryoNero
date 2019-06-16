@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "TransactionExtra.hpp"
@@ -12,7 +12,7 @@
 #include "seria/BinaryInputStream.hpp"
 #include "seria/BinaryOutputStream.hpp"
 
-namespace cryonero {
+namespace nazacoin {
 
 template<typename T>
 bool find_transaction_extra_field_by_type(const std::vector<TransactionExtraField> &tx_extra_fields, T &field) {
@@ -198,7 +198,7 @@ bool get_payment_id_from_tx_extra(const BinaryArray &extra, Hash &payment_id) {
 }
 }
 
-static void do_serialize(cryonero::TransactionExtraMergeMiningTag &tag, seria::ISeria &s) {
+static void do_serialize(nazacoin::TransactionExtraMergeMiningTag &tag, seria::ISeria &s) {
 	s.begin_object();
 	auto depth = static_cast<uint64_t>(tag.depth);
 	seria_kv("depth", depth, s);
@@ -207,7 +207,7 @@ static void do_serialize(cryonero::TransactionExtraMergeMiningTag &tag, seria::I
 	s.end_object();
 }
 
-void seria::ser(cryonero::TransactionExtraMergeMiningTag &v, ISeria &s) {
+void seria::ser(nazacoin::TransactionExtraMergeMiningTag &v, ISeria &s) {
 	if (s.is_input()) {
 		std::string field;
 		s(field);

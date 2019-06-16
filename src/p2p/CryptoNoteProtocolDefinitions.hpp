@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 
@@ -10,7 +10,7 @@
 #include <list>
 #include "CryptoNote.hpp"
 
-namespace cryonero {
+namespace nazacoin {
 
 	enum { BC_COMMANDS_POOL_BASE = 2000 };
 
@@ -82,12 +82,12 @@ namespace cryonero {
 }
 
 namespace seria {
-	void ser_members(cryonero::RawBlockLegacy &v, seria::ISeria &s);
-	void ser_members(cryonero::NOTIFY_NEW_BLOCK::request &v, seria::ISeria &s);
-	void ser_members(cryonero::NOTIFY_NEW_TRANSACTIONS::request &v, seria::ISeria &s);
-	void ser_members(cryonero::NOTIFY_REQUEST_GET_OBJECTS::request &v, seria::ISeria &s);
-	void ser_members(cryonero::NOTIFY_RESPONSE_GET_OBJECTS::request &v, seria::ISeria &s);
-	void ser_members(cryonero::NOTIFY_REQUEST_CHAIN::request &v, seria::ISeria &s);
-	void ser_members(cryonero::NOTIFY_RESPONSE_CHAIN_ENTRY::request &v, seria::ISeria &s);
-	void ser_members(cryonero::NOTIFY_REQUEST_TX_POOL::request &v, seria::ISeria &s);
+	void ser_members(nazacoin::RawBlockLegacy &v, seria::ISeria &s);
+	void ser_members(nazacoin::NOTIFY_NEW_BLOCK::request &v, seria::ISeria &s);
+	void ser_members(nazacoin::NOTIFY_NEW_TRANSACTIONS::request &v, seria::ISeria &s);
+	void ser_members(nazacoin::NOTIFY_REQUEST_GET_OBJECTS::request &v, seria::ISeria &s);
+	void ser_members(nazacoin::NOTIFY_RESPONSE_GET_OBJECTS::request &v, seria::ISeria &s);
+	void ser_members(nazacoin::NOTIFY_REQUEST_CHAIN::request &v, seria::ISeria &s);
+	void ser_members(nazacoin::NOTIFY_RESPONSE_CHAIN_ENTRY::request &v, seria::ISeria &s);
+	void ser_members(nazacoin::NOTIFY_REQUEST_TX_POOL::request &v, seria::ISeria &s);
 }

@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "WalletState.hpp"
@@ -19,7 +19,7 @@
 
 static const std::string ADDRESSES_PREFIX = "a";  
 
-using namespace cryonero;
+using namespace nazacoin;
 using namespace platform;
 
 Amount WalletState::DeltaState::add_incoming_output(const api::Output &output) {
@@ -133,7 +133,7 @@ void WalletState::wallet_addresses_updated() {
 		m_log(logging::ERROR)
 			<< "Exception in wallet_addresses_updated, probably out of disk space or database corrupted error="
 			<< ex.what() << " path=" << m_db.get_path() << std::endl;
-		std::exit(api::cryonerod_DATABASE_ERROR);
+		std::exit(api::NAZAD_DATABASE_ERROR);
 	}
 	fix_payment_queue_after_undo_redo();
 	db_commit();
@@ -199,9 +199,9 @@ BinaryArray WalletState::get_next_from_sending_queue(Hash *previous_hash) {
 	return git->binary_transaction;
 }
 
-void WalletState::process_payment_queue_send_error(Hash hash, const api::cryonerod::SendTransaction::Error &error) {
-	if (error.code == api::cryonerod::SendTransaction::OUTPUT_ALREADY_SPENT ||
-		error.code == api::cryonerod::SendTransaction::WRONG_OUTPUT_REFERENCE) {
+void WalletState::process_payment_queue_send_error(Hash hash, const api::nazad::SendTransaction::Error &error) {
+	if (error.code == api::nazad::SendTransaction::OUTPUT_ALREADY_SPENT ||
+		error.code == api::nazad::SendTransaction::WRONG_OUTPUT_REFERENCE) {
 		if (get_tip_height() > error.conflict_height + m_currency.expected_blocks_per_day()) {
 			auto &by_hash_index = payment_queue.get<by_hash>();
 			auto git = by_hash_index.find(hash);
@@ -306,7 +306,7 @@ void WalletState::remove_transaction_from_mempool(Hash tid, bool from_pq) {
 	m_memory_state.undo_transaction(tid);
 }
 
-bool WalletState::sync_with_blockchain(api::cryonerod::SyncBlocks::Response &resp) {
+bool WalletState::sync_with_blockchain(api::nazad::SyncBlocks::Response &resp) {
 	if (resp.blocks.empty()) 
 		return true;
 	try {
@@ -362,7 +362,7 @@ bool WalletState::sync_with_blockchain(api::cryonerod::SyncBlocks::Response &res
 		m_log(logging::ERROR)
 			<< "Exception in sync_with_blockchain, probably out of disk space or database corrupted error=" << ex.what()
 			<< " path=" << m_db.get_path() << std::endl;
-		std::exit(api::cryonerod_DATABASE_ERROR);
+		std::exit(api::NAZAD_DATABASE_ERROR);
 	}
 	fix_payment_queue_after_undo_redo();
 	return true;
@@ -372,7 +372,7 @@ std::vector<Hash> WalletState::get_tx_pool_hashes() const {
 	return std::vector<Hash>(m_pool_hashes.begin(), m_pool_hashes.end());
 }
 
-bool WalletState::sync_with_blockchain(api::cryonerod::SyncMemPool::Response &resp) {
+bool WalletState::sync_with_blockchain(api::nazad::SyncMemPool::Response &resp) {
 	for (const auto & tid : resp.removed_hashes) {
 		if (m_pool_hashes.erase(tid) != 0)
 			remove_transaction_from_mempool(tid, false);

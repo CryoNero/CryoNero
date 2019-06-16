@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -10,7 +10,7 @@
 
 using namespace crypto;
 
-namespace cryonero
+namespace nazacoin
 {
 	namespace api
 	{
@@ -39,7 +39,7 @@ namespace cryonero
 
 			struct Block
 			{
-				cryonero::api::BlockHeader header;
+				nazacoin::api::BlockHeader header;
 				std::vector<TransactionPreview> transactions;
 			};
 
@@ -86,7 +86,7 @@ namespace cryonero
 				struct Response
 				{
 					BlockPreview block;
-					cryonero::Transaction transaction;
+					nazacoin::Transaction transaction;
 					TransactionPreview transaction_details;
 				};
 			};
@@ -107,13 +107,13 @@ namespace cryonero
 
 namespace seria
 {
-	void ser_members(cryonero::api::extensions::BlockPreview &v, ISeria &s);
-	void ser_members(cryonero::api::extensions::Block &v, ISeria &s);
-	void ser_members(cryonero::api::extensions::GetBlocks::Request &v, ISeria &s);
-	void ser_members(cryonero::api::extensions::GetBlocks::Response &v, ISeria &s);
-	void ser_members(cryonero::api::extensions::GetBlock::Request &v, ISeria &s);
-	void ser_members(cryonero::api::extensions::GetBlock::Response &v, ISeria &s);
-	void ser_members(cryonero::api::extensions::GetTransaction::Request &v, ISeria &s);
-	void ser_members(cryonero::api::extensions::GetTransaction::Response &v, ISeria &s);
-	void ser_members(cryonero::api::extensions::GetMempool::Response &v, ISeria &s);
+	void ser_members(nazacoin::api::extensions::BlockPreview &v, ISeria &s);
+	void ser_members(nazacoin::api::extensions::Block &v, ISeria &s);
+	void ser_members(nazacoin::api::extensions::GetBlocks::Request &v, ISeria &s);
+	void ser_members(nazacoin::api::extensions::GetBlocks::Response &v, ISeria &s);
+	void ser_members(nazacoin::api::extensions::GetBlock::Request &v, ISeria &s);
+	void ser_members(nazacoin::api::extensions::GetBlock::Response &v, ISeria &s);
+	void ser_members(nazacoin::api::extensions::GetTransaction::Request &v, ISeria &s);
+	void ser_members(nazacoin::api::extensions::GetTransaction::Response &v, ISeria &s);
+	void ser_members(nazacoin::api::extensions::GetMempool::Response &v, ISeria &s);
 }

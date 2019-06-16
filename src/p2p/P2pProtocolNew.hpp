@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -15,7 +15,7 @@
 #include "crypto/generic-ops.hpp"
 #include "seria/ISeria.hpp"
 
-namespace cryonero {
+namespace nazacoin {
 
 	namespace np {  // new protocol
 
@@ -171,7 +171,7 @@ namespace cryonero {
 			std::vector<TransactionDesc> transaction_descs;
 		};
 
-#if cryonero_ALLOW_DEBUG_COMMANDS
+#if nazacoin_ALLOW_DEBUG_COMMANDS
 
 		struct proof_of_trust {
 			PeerIdType peer_id = 0;
@@ -191,7 +191,7 @@ namespace cryonero {
 			struct Response {
 				enum { ID = 802 };
 
-				std::string version;   // cryonerod version
+				std::string version;   // nazad version
 				std::string platform;  // Windows, Linux, Darwin, etc.
 				std::vector<PeerlistEntry> peer_list_white;
 				std::vector<PeerlistEntry> peer_list_ban;
@@ -215,15 +215,15 @@ namespace cryonero {
 }
 
 namespace seria {
-	void ser_members(cryonero::np::NetworkAddress &v, seria::ISeria &s);
-	void ser_members(cryonero::np::PeerlistEntry &v, seria::ISeria &s);
-	void ser_members(cryonero::np::ConnectionDesc &v, seria::ISeria &s);
-	void ser_members(cryonero::np::PeerDesc &v, seria::ISeria &s);
-	void ser_members(cryonero::np::TopBlockDesc &v, seria::ISeria &s);
-	void ser_members(cryonero::np::TransactionDesc &v, seria::ISeria &s);
-	void ser_members(cryonero::np::Handshake::Request &v, seria::ISeria &s);
-	void ser_members(cryonero::np::Handshake::Response &v, seria::ISeria &s);
-	void ser_members(cryonero::np::FindDiff::Request &v, seria::ISeria &s);
-	void ser_members(cryonero::np::FindDiff::Response &v, seria::ISeria &s);
-	void ser_members(cryonero::np::RelayTransactionDescs &v, seria::ISeria &s);
+	void ser_members(nazacoin::np::NetworkAddress &v, seria::ISeria &s);
+	void ser_members(nazacoin::np::PeerlistEntry &v, seria::ISeria &s);
+	void ser_members(nazacoin::np::ConnectionDesc &v, seria::ISeria &s);
+	void ser_members(nazacoin::np::PeerDesc &v, seria::ISeria &s);
+	void ser_members(nazacoin::np::TopBlockDesc &v, seria::ISeria &s);
+	void ser_members(nazacoin::np::TransactionDesc &v, seria::ISeria &s);
+	void ser_members(nazacoin::np::Handshake::Request &v, seria::ISeria &s);
+	void ser_members(nazacoin::np::Handshake::Response &v, seria::ISeria &s);
+	void ser_members(nazacoin::np::FindDiff::Request &v, seria::ISeria &s);
+	void ser_members(nazacoin::np::FindDiff::Response &v, seria::ISeria &s);
+	void ser_members(nazacoin::np::RelayTransactionDescs &v, seria::ISeria &s);
 }

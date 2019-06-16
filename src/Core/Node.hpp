@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -21,10 +21,10 @@
 #include "rpc_api.hpp"
 #include "node_api_extensions.hpp"
 
-namespace cryonero {
+namespace nazacoin {
 
 static const float DB_COMMIT_PERIOD_WALLET_CACHE = 290;  // 5 minutes sounds good compromise
-static const float DB_COMMIT_PERIOD_cryonerod    = 310;  // 5 minutes sounds good compromise
+static const float DB_COMMIT_PERIOD_NAZAD    = 310;  // 5 minutes sounds good compromise
 static const float SYNC_TIMEOUT                  = 20;   // If sync does not return, select different sync node after
 static const int DOWNLOAD_CONCURRENCY            = 4;
 static const int DOWNLOAD_QUEUE                  = 10;  // number of block requests sent before receiving reply
@@ -41,44 +41,44 @@ public:
 
 	// binary method
 	bool on_wallet_sync3(http::Client *, http::RequestData &&, json_rpc::Request &&,
-	    api::cryonerod::SyncBlocks::Request &&, api::cryonerod::SyncBlocks::Response &);
+	    api::nazad::SyncBlocks::Request &&, api::nazad::SyncBlocks::Response &);
 	bool on_sync_mempool3(http::Client *, http::RequestData &&, json_rpc::Request &&,
-	    api::cryonerod::SyncMemPool::Request &&, api::cryonerod::SyncMemPool::Response &);
+	    api::nazad::SyncMemPool::Request &&, api::nazad::SyncMemPool::Response &);
 	bool on_get_raw_transaction3(http::Client *, http::RequestData &&, json_rpc::Request &&,
-	   // api::cryonerod::GetRawTransaction::Request &&, api::cryonerod::GetRawTransaction::Response &);
-		api::cryonerod::GetRawTransaction::Request &&, api::cryonerod::GetRawTransaction::Response &);
+	   // api::nazad::GetRawTransaction::Request &&, api::nazad::GetRawTransaction::Response &);
+		api::nazad::GetRawTransaction::Request &&, api::nazad::GetRawTransaction::Response &);
 	bool on_get_raw_block(http::Client *, http::RequestData &&, json_rpc::Request &&,
-		api::cryonerod::GetRawBlock::Request &&, api::cryonerod::GetRawBlock::Response &);
+		api::nazad::GetRawBlock::Request &&, api::nazad::GetRawBlock::Response &);
 
 
 
-	api::cryonerod::GetStatus::Response create_status_response3() const;
+	api::nazad::GetStatus::Response create_status_response3() const;
 	// json_rpc_node
 	bool on_get_status3(http::Client *, http::RequestData &&, json_rpc::Request &&,
-	    api::cryonerod::GetStatus::Request &&, api::cryonerod::GetStatus::Response &);
+	    api::nazad::GetStatus::Request &&, api::nazad::GetStatus::Response &);
 	bool on_get_random_outputs3(http::Client *, http::RequestData &&, json_rpc::Request &&,
-	    api::cryonerod::GetRandomOutputs::Request &&, api::cryonerod::GetRandomOutputs::Response &);
+	    api::nazad::GetRandomOutputs::Request &&, api::nazad::GetRandomOutputs::Response &);
 	bool handle_send_transaction3(http::Client *, http::RequestData &&, json_rpc::Request &&,
-	    api::cryonerod::SendTransaction::Request &&, api::cryonerod::SendTransaction::Response &);
+	    api::nazad::SendTransaction::Request &&, api::nazad::SendTransaction::Response &);
 	bool handle_check_sendproof3(http::Client *, http::RequestData &&, json_rpc::Request &&,
-	    api::cryonerod::CheckSendProof::Request &&, api::cryonerod::CheckSendProof::Response &);
+	    api::nazad::CheckSendProof::Request &&, api::nazad::CheckSendProof::Response &);
 	bool on_getblocktemplate(http::Client *, http::RequestData &&, json_rpc::Request &&,
-	    api::cryonerod::GetBlockTemplate::Request &&r, api::cryonerod::GetBlockTemplate::Response &);
+	    api::nazad::GetBlockTemplate::Request &&r, api::nazad::GetBlockTemplate::Response &);
 	void getblocktemplate(
-	    const api::cryonerod::GetBlockTemplate::Request &, api::cryonerod::GetBlockTemplate::Response &);
+	    const api::nazad::GetBlockTemplate::Request &, api::nazad::GetBlockTemplate::Response &);
 	bool on_get_currency_id(http::Client *, http::RequestData &&, json_rpc::Request &&,
-	    api::cryonerod::GetCurrencyId::Request &&, api::cryonerod::GetCurrencyId::Response &);
+	    api::nazad::GetCurrencyId::Request &&, api::nazad::GetCurrencyId::Response &);
 	bool on_submitblock(http::Client *, http::RequestData &&, json_rpc::Request &&,
-	    api::cryonerod::SubmitBlock::Request &&, api::cryonerod::SubmitBlock::Response &);
+	    api::nazad::SubmitBlock::Request &&, api::nazad::SubmitBlock::Response &);
 	bool on_submitblock_legacy(http::Client *, http::RequestData &&, json_rpc::Request &&,
-	    api::cryonerod::SubmitBlockLegacy::Request &&, api::cryonerod::SubmitBlockLegacy::Response &);
+	    api::nazad::SubmitBlockLegacy::Request &&, api::nazad::SubmitBlockLegacy::Response &);
 	bool on_get_last_block_header(http::Client *, http::RequestData &&, json_rpc::Request &&,
-	    api::cryonerod::GetLastBlockHeaderLegacy::Request &&, api::cryonerod::GetLastBlockHeaderLegacy::Response &);
+	    api::nazad::GetLastBlockHeaderLegacy::Request &&, api::nazad::GetLastBlockHeaderLegacy::Response &);
 	bool on_get_block_header_by_hash(http::Client *, http::RequestData &&, json_rpc::Request &&,
-	    api::cryonerod::GetBlockHeaderByHashLegacy::Request &&, api::cryonerod::GetBlockHeaderByHashLegacy::Response &);
+	    api::nazad::GetBlockHeaderByHashLegacy::Request &&, api::nazad::GetBlockHeaderByHashLegacy::Response &);
 	bool on_get_block_header_by_height(http::Client *, http::RequestData &&, json_rpc::Request &&,
-	    api::cryonerod::GetBlockHeaderByHeightLegacy::Request &&,
-	    api::cryonerod::GetBlockHeaderByHeightLegacy::Response &);
+	    api::nazad::GetBlockHeaderByHeightLegacy::Request &&,
+	    api::nazad::GetBlockHeaderByHeightLegacy::Response &);
 
 	// Node API Extensions
 	bool on_get_blocks_json(http::Client *, http::RequestData &&, json_rpc::Request &&,
@@ -105,7 +105,7 @@ protected:
 		http::Client *original_who = nullptr;
 		http::RequestData original_request;
 		json_rpc::Request original_json_request;
-		api::cryonerod::GetStatus::Request original_get_status;
+		api::nazad::GetStatus::Request original_get_status;
 	};
 	std::list<LongPollClient> m_long_poll_http_clients;
 	void advance_long_poll();
@@ -119,14 +119,14 @@ protected:
 	std::unique_ptr<platform::PreventSleep> prevent_sleep;
 	void db_commit() {
 		m_block_chain.db_commit();
-		m_commit_timer.once(DB_COMMIT_PERIOD_cryonerod);
+		m_commit_timer.once(DB_COMMIT_PERIOD_NAZAD);
 	}
 
 	bool check_trust(const proof_of_trust &);
 	uint64_t m_last_stat_request_time = 0;
 	// Prevent replay attacks by only trusting requests with timestamp > than previous request
 
-	class P2PClientcryonero : public P2PClientBasic {
+	class P2PClientNazacoin : public P2PClientBasic {
 		Node *const m_node;
 		void after_handshake();
 
@@ -149,27 +149,27 @@ protected:
 		virtual void on_msg_timed_sync(COMMAND_TIMED_SYNC::response &&) override;
 		virtual void on_msg_notify_new_block(NOTIFY_NEW_BLOCK::request &&) override;
 		virtual void on_msg_notify_new_transactions(NOTIFY_NEW_TRANSACTIONS::request &&) override;
-#if cryonero_ALLOW_DEBUG_COMMANDS
+#if nazacoin_ALLOW_DEBUG_COMMANDS
 		virtual void on_msg_network_state(COMMAND_REQUEST_NETWORK_STATE::request &&) override;
 		virtual void on_msg_stat_info(COMMAND_REQUEST_STAT_INFO::request &&) override;
 #endif
 	public:
-		explicit P2PClientcryonero(Node *node, bool incoming, D_handler d_handler)
+		explicit P2PClientNazacoin(Node *node, bool incoming, D_handler d_handler)
 		    : P2PClientBasic(node->m_config, node->m_p2p.get_unique_number(), incoming, d_handler), m_node(node) {}
 		Node *get_node() const { return m_node; }
 	};
 	std::unique_ptr<P2PClient> client_factory(bool incoming, P2PClient::D_handler d_handler) {
-		return std::make_unique<P2PClientcryonero>(this, incoming, d_handler);
+		return std::make_unique<P2PClientNazacoin>(this, incoming, d_handler);
 	}
 
 	class DownloaderV11 {  // torrent-style sync&download from legacy v1 clients
 		Node *const m_node;
 		BlockChainState &m_block_chain;
 
-		std::map<P2PClientcryonero *, size_t> m_good_clients;  // -> # of downloading blocks
+		std::map<P2PClientNazacoin *, size_t> m_good_clients;  // -> # of downloading blocks
 		size_t total_downloading_blocks = 0;
-		std::list<P2PClientcryonero *> m_who_downloaded_block;
-		P2PClientcryonero *m_chain_client = nullptr;
+		std::list<P2PClientNazacoin *> m_who_downloaded_block;
+		P2PClientNazacoin *m_chain_client = nullptr;
 		bool m_chain_request_sent         = false;
 		platform::Timer m_chain_timer;  // If m_chain_client does not respond for long, disconnect it
 
@@ -178,7 +178,7 @@ protected:
 			Height expected_height = 0;
 			NetworkAddress bid_source;  // for banning culprit in case of a problem
 			NetworkAddress block_source;  // for banning culprit in case of a problem
-			P2PClientcryonero *downloading_client = nullptr;
+			P2PClientNazacoin *downloading_client = nullptr;
 			std::chrono::steady_clock::time_point request_time;
 			RawBlock rb;
 			enum Status { DOWNLOADING, DOWNLOADED, PREPARING, PREPARED } status = DOWNLOADING;
@@ -206,7 +206,7 @@ protected:
 		void add_work(std::tuple<Hash, bool, RawBlock> &&wo);
 		void thread_run();
 
-		void start_download(DownloadCell &dc, P2PClientcryonero *who);
+		void start_download(DownloadCell &dc, P2PClientNazacoin *who);
 		void stop_download(DownloadCell &dc, bool success);
 		void on_chain_timer();
 		void on_download_timer();
@@ -220,11 +220,11 @@ protected:
 		bool on_idle();
 
 		uint32_t get_known_block_count(uint32_t my) const;
-		void on_connect(P2PClientcryonero *);
-		void on_disconnect(P2PClientcryonero *);
-		const std::map<P2PClientcryonero *, size_t> &get_good_clients() const { return m_good_clients; }
-		void on_msg_notify_request_chain(P2PClientcryonero *, const NOTIFY_RESPONSE_CHAIN_ENTRY::request &);
-		void on_msg_notify_request_objects(P2PClientcryonero *, const NOTIFY_RESPONSE_GET_OBJECTS::request &);
+		void on_connect(P2PClientNazacoin *);
+		void on_disconnect(P2PClientNazacoin *);
+		const std::map<P2PClientNazacoin *, size_t> &get_good_clients() const { return m_good_clients; }
+		void on_msg_notify_request_chain(P2PClientNazacoin *, const NOTIFY_RESPONSE_CHAIN_ENTRY::request &);
+		void on_msg_notify_request_objects(P2PClientNazacoin *, const NOTIFY_RESPONSE_GET_OBJECTS::request &);
 	};
 
 	DownloaderV11 m_downloader;
@@ -232,10 +232,10 @@ protected:
 	bool on_api_http_request(http::Client *, http::RequestData &&, http::ResponseData &);
 	void on_api_http_disconnect(http::Client *);
 
-	void sync_transactions(P2PClientcryonero *);
+	void sync_transactions(P2PClientNazacoin *);
 
 	static const std::unordered_map<std::string, HTTPHandlerFunction> m_http_handlers;
 	static std::unordered_map<std::string, JSONRPCHandlerFunction> m_jsonrpc_handlers;
 };
 
-}  // namespace cryonero
+}  // namespace nazacoin

@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -11,7 +11,7 @@
 #include "http/Server.hpp"
 #include "wallet_api_extensions.hpp"
 
-namespace cryonero {
+namespace nazacoin {
 
 	class WalletNode : public WalletSync {
 	public:
@@ -38,8 +38,8 @@ namespace cryonero {
 		bool handle_create_sendproof3(http::Client *, http::RequestData &&, json_rpc::Request &&,
 			api::walletd::CreateSendProof::Request &&, api::walletd::CreateSendProof::Response &);
 		bool handle_send_transaction3(http::Client *, http::RequestData &&, json_rpc::Request &&,
-			api::cryonerod::SendTransaction::Request &&,
-			api::cryonerod::SendTransaction::Response &);  
+			api::nazad::SendTransaction::Request &&,
+			api::nazad::SendTransaction::Response &);  
 		bool handle_get_transaction3(http::Client *, http::RequestData &&, json_rpc::Request &&,
 			api::walletd::GetTransaction::Request &&, api::walletd::GetTransaction::Response &);
 
@@ -72,7 +72,7 @@ namespace cryonero {
 			http::Client *original_who = nullptr;
 			http::RequestData original_request;
 			json_rpc::OptionalJsonValue original_jsonrpc_id;
-			cryonero::api::walletd::GetStatus::Request original_get_status;
+			nazacoin::api::walletd::GetStatus::Request original_get_status;
 		};
 		std::list<LongPollClient> m_long_poll_http_clients;
 		void advance_long_poll();

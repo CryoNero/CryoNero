@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "CryptoNoteTools.hpp"
@@ -9,9 +9,9 @@
 #include "TransactionExtra.hpp"
 #include "seria/ISeria.hpp"
 
-using namespace cryonero;
+using namespace nazacoin;
 
-Hash cryonero::get_base_transaction_hash(const BaseTransaction &tx) {
+Hash nazacoin::get_base_transaction_hash(const BaseTransaction &tx) {
 	if (tx.version < 2)
 		return get_object_hash(tx);
 	BinaryArray data{{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -24,14 +24,14 @@ Hash cryonero::get_base_transaction_hash(const BaseTransaction &tx) {
 	return crypto::cn_fast_hash(data.data(), data.size());
 }
 
-void cryonero::fix_merge_mining_tag(BlockTemplate &block) {
+void nazacoin::fix_merge_mining_tag(BlockTemplate &block) {
 	if (block.major_version >= 2) {
-		cryonero::TransactionExtraMergeMiningTag mmTag;
+		nazacoin::TransactionExtraMergeMiningTag mmTag;
 		mmTag.depth = 0;
 		block.parent_block.base_transaction.extra.clear();
 		mmTag.merkle_root = get_auxiliary_block_header_hash(block);
-		if (!cryonero::append_merge_mining_tag_to_extra(block.parent_block.base_transaction.extra, mmTag))
-			throw std::runtime_error("cryonero::append_merge_mining_tag_to_extra failed");
+		if (!nazacoin::append_merge_mining_tag_to_extra(block.parent_block.base_transaction.extra, mmTag))
+			throw std::runtime_error("nazacoin::append_merge_mining_tag_to_extra failed");
 	}
 }
 
@@ -70,7 +70,7 @@ void decompose_amount_into_digits(
 	}
 }
 
-void cryonero::decompose_amount(Amount amount, Amount dust_threshold, std::vector<Amount> *decomposed_amounts) {
+void nazacoin::decompose_amount(Amount amount, Amount dust_threshold, std::vector<Amount> *decomposed_amounts) {
 	decompose_amount_into_digits(amount, dust_threshold, [&](Amount amount) { decomposed_amounts->push_back(amount); },
 	    [&](Amount dust) {
 		    Amount du0 = dust % 1000;
@@ -82,7 +82,7 @@ void cryonero::decompose_amount(Amount amount, Amount dust_threshold, std::vecto
 		});
 }
 
-size_t cryonero::get_maximum_tx_size(size_t input_count, size_t output_count, size_t mixin_count) {
+size_t nazacoin::get_maximum_tx_size(size_t input_count, size_t output_count, size_t mixin_count) {
 	const size_t KEY_IMAGE_SIZE                    = sizeof(crypto::KeyImage);
 	const size_t OUTPUT_KEY_SIZE                   = sizeof(crypto::PublicKey);
 	const size_t AMOUNT_SIZE                       = sizeof(uint64_t) + 2;  // varint
@@ -106,7 +106,7 @@ size_t cryonero::get_maximum_tx_size(size_t input_count, size_t output_count, si
 	return header_size + outputs_size + input_size * input_count;
 }
 
-bool cryonero::get_tx_fee(const TransactionPrefix &tx, uint64_t *fee) {
+bool nazacoin::get_tx_fee(const TransactionPrefix &tx, uint64_t *fee) {
 	uint64_t amount_in  = 0;
 	uint64_t amount_out = 0;
 
@@ -128,7 +128,7 @@ bool cryonero::get_tx_fee(const TransactionPrefix &tx, uint64_t *fee) {
 	return true;
 }
 
-uint64_t cryonero::get_tx_fee(const TransactionPrefix &tx) {
+uint64_t nazacoin::get_tx_fee(const TransactionPrefix &tx) {
 	uint64_t r = 0;
 	if (!get_tx_fee(tx, &r))
 		return 0;

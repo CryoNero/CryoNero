@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -12,13 +12,13 @@
 #include "http/Agent.hpp"
 #include "http/JsonRpc.hpp"
 
-namespace cryonero {
+namespace nazacoin {
 
 	class WalletSync {
 	public:
 		explicit WalletSync(logging::ILogger &, const Config &, WalletState &, std::function<void()> state_changed_handler);
 
-		const api::cryonerod::GetStatus::Response &get_last_node_status() const { return m_last_node_status; }
+		const api::nazad::GetStatus::Response &get_last_node_status() const { return m_last_node_status; }
 		std::string get_sync_error() const { return m_sync_error; }
 
 	protected:
@@ -26,7 +26,7 @@ namespace cryonero {
 		logging::LoggerRef m_log;
 		const Config &m_config;
 
-		api::cryonerod::GetStatus::Response m_last_node_status;
+		api::nazad::GetStatus::Response m_last_node_status;
 		std::string m_sync_error;
 		platform::Timer m_status_timer;
 		http::Agent m_sync_agent;
@@ -51,4 +51,4 @@ namespace cryonero {
 		void send_get_blocks();
 	};
 
-}  // namespace cryonero
+}  // namespace nazacoin

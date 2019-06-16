@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -19,7 +19,7 @@
 #include "crypto/chacha8.h"
 #include "platform/DB.hpp"
 
-namespace cryonero {
+namespace nazacoin {
 
 class Config;
 
@@ -52,8 +52,8 @@ public:
 	const Wallet &get_wallet() const { return m_wallet; }
 	Wallet &get_wallet() { return m_wallet; }
 
-	bool sync_with_blockchain(api::cryonerod::SyncBlocks::Response &);   
-	bool sync_with_blockchain(api::cryonerod::SyncMemPool::Response &); 
+	bool sync_with_blockchain(api::nazad::SyncBlocks::Response &);   
+	bool sync_with_blockchain(api::nazad::SyncMemPool::Response &); 
 
 	virtual std::vector<api::Output> api_get_locked_or_unconfirmed_unspent(const std::string &address, Height confirmed_height) const override;
 
@@ -61,7 +61,7 @@ public:
 virtual api::Balance get_balance(const std::string &address, Height confirmed_height) const override;
 
 	bool add_to_payment_queue(const BinaryArray &binary_transaction, bool save_file);
-	void process_payment_queue_send_error(Hash hash, const api::cryonerod::SendTransaction::Error &error);
+	void process_payment_queue_send_error(Hash hash, const api::nazad::SendTransaction::Error &error);
 	BinaryArray get_next_from_sending_queue(Hash *previous_hash);
 
 		bool api_has_transaction(Hash tid, bool check_pool) const;

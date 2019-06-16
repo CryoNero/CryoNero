@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 
@@ -12,7 +12,7 @@
 #include "P2P.hpp"
 #include "P2pProtocolDefinitions.hpp"
 
-namespace cryonero {
+namespace nazacoin {
 
 	class Config;
 
@@ -57,7 +57,7 @@ namespace cryonero {
 		virtual void on_msg_ping(COMMAND_PING::response &&) {}              // called after some internal processing
 		virtual void on_msg_timed_sync(COMMAND_TIMED_SYNC::request &&) {}   // called after some internal processing
 		virtual void on_msg_timed_sync(COMMAND_TIMED_SYNC::response &&) {}  // called after some internal processing
-#if cryonero_ALLOW_DEBUG_COMMANDS
+#if nazacoin_ALLOW_DEBUG_COMMANDS
 		virtual void on_msg_network_state(COMMAND_REQUEST_NETWORK_STATE::request &&) {}
 		virtual void on_msg_network_state(COMMAND_REQUEST_NETWORK_STATE::response &&) {}
 		virtual void on_msg_stat_info(COMMAND_REQUEST_STAT_INFO::request &&) {}

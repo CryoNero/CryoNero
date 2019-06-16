@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 
@@ -14,10 +14,10 @@ const float HANDSHAKE_TIMEOUT  = 30;
 const float MESSAGE_TIMEOUT    = 60 * 6;
 const float TIMED_SYNC_TIMEOUT = 60 * 4;
 
-using namespace cryonero;
+using namespace nazacoin;
 
 template<typename Cmd>
-cryonero::P2PClientBasic::LevinHandlerFunction levin_method(void (cryonero::P2PClientBasic::*handler)(Cmd &&)) {
+nazacoin::P2PClientBasic::LevinHandlerFunction levin_method(void (nazacoin::P2PClientBasic::*handler)(Cmd &&)) {
 	return [handler](P2PClientBasic *who, BinaryArray &&body) {
 
 		Cmd req{};
@@ -39,7 +39,7 @@ std::map<std::pair<uint32_t, bool>, P2PClientBasic::LevinHandlerFunction> P2PCli
 std::map<std::pair<uint32_t, bool>, P2PClientBasic::LevinHandlerFunction> P2PClientBasic::after_handshake_handlers = {
     {{COMMAND_TIMED_SYNC::ID, false}, levin_method<COMMAND_TIMED_SYNC::request>(&P2PClientBasic::msg_timed_sync)},
     {{COMMAND_TIMED_SYNC::ID, true}, levin_method<COMMAND_TIMED_SYNC::response>(&P2PClientBasic::msg_timed_sync)},
-#if cryonero_ALLOW_DEBUG_COMMANDS
+#if nazacoin_ALLOW_DEBUG_COMMANDS
     {{COMMAND_REQUEST_NETWORK_STATE::ID, false},
         levin_method<COMMAND_REQUEST_NETWORK_STATE::request>(&P2PClientBasic::on_msg_network_state)},
     {{COMMAND_REQUEST_NETWORK_STATE::ID, true},
@@ -248,7 +248,7 @@ void P2PClientBasic::on_request_ready() {
 				}
 				continue;
 			}
-			std::cout << "generic cryonero::P2P cmd=" << cmd.command << " " << cmd.is_response << " " << cmd.is_notify
+			std::cout << "generic nazacoin::P2P cmd=" << cmd.command << " " << cmd.is_response << " " << cmd.is_notify
 			          << std::endl;
 		} catch (const std::exception &ex) {
 			disconnect(std::string("299 Exception processing p2p message what=") + ex.what());

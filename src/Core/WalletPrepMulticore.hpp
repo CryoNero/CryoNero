@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -14,7 +14,7 @@
 #include "rpc_api.hpp"
 
 
-namespace cryonero {
+namespace nazacoin {
 
 class IBlockChainState;  
 class Currency;
@@ -47,7 +47,7 @@ class WalletPreparatorMulticore {
 	bool quit = false;
 
 	std::map<Height, PreparedWalletBlock> prepared_blocks;
-	api::cryonerod::SyncBlocks::Response work;
+	api::nazad::SyncBlocks::Response work;
 	int work_counter = 0;
 	SecretKey work_secret_key;
 	void thread_run();
@@ -56,7 +56,7 @@ public:
 	WalletPreparatorMulticore();
 	~WalletPreparatorMulticore();
 	void cancel_work();
-	void start_work(const api::cryonerod::SyncBlocks::Response &new_work, const SecretKey &view_secret_key);
+	void start_work(const api::nazad::SyncBlocks::Response &new_work, const SecretKey &view_secret_key);
 	PreparedWalletBlock get_ready_work(Height height);
 };
 

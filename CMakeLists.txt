@@ -1,20 +1,20 @@
 # Copyright (c) 2012-2018, The CryptoNote developers.
 # Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-# Copyright (c) 2019, The CryoNero developers.
+# Copyright (c) 2018-2019, The Naza developers.
 # Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 cmake_minimum_required(VERSION 3.5)
-project(cryonero_core)
+project(naza_core)
 #set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_C_STANDARD 11)
 
 
-# message(STATUS "CryoNerod profile: According to cmake, sizeof(void *) == " ${CMAKE_SIZEOF_VOID_P})
+# message(STATUS "Nazad profile: According to cmake, sizeof(void *) == " ${CMAKE_SIZEOF_VOID_P})
 option(USE_INSTRUMENTATION "For testing - builds with address sanitizer instrument" OFF)
 option(WITH_THREAD_SANITIZER "For testing - builds with thread sanitizer instrument, USE_INSTRUMENTATION must be also set" OFF)
-option(USE_SSL "Builds with support of https between wallet-rpc and cryonerod" OFF)
+option(USE_SSL "Builds with support of https between wallet-rpc and nazad" OFF)
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     if(WIN32)
 	    option(USE_SQLITE "Builds with SQLite instead of LMDB. 4x slower, but works on 32-bit and mobile platforms" ON)
@@ -67,7 +67,7 @@ if(USE_SSL)
 else()
     message(STATUS "SSL usage: OFF")
 endif()
-file(GLOB SRC_CRYONERO src/cryonero/*.cpp src/cryonero/*.hpp)
+file(GLOB SRC_NAZA src/naza/*.cpp src/naza/*.hpp)
 file(GLOB SRC_CRYPTO
     src/crypto/*.cpp src/crypto/*.hpp src/crypto/*.h
     src/crypto/blake256.c
@@ -154,22 +154,22 @@ if(WIN32)
         link_directories(SYSTEM ../boost/stage32/lib) # must be before add_executable, add_library
     endif()
 endif()
-add_library(cryonero-crypto ${SRC_CRYPTO})
-add_library(cryonero-core ${SOURCE_FILES})
-target_link_libraries(cryonero-core cryonero-crypto)
+add_library(naza-crypto ${SRC_CRYPTO})
+add_library(naza-core ${SOURCE_FILES})
+target_link_libraries(naza-core naza-crypto)
 if(WIN32)
-    add_executable(wallet-rpc src/main_wallet_rpc.cpp src/cryonero.rc) # .rc works only if referenced directly in add_executable
-    add_executable(cryonerod src/main_cryonerod.cpp src/cryonero.rc) # .rc works only if referenced directly in add_executable
+    add_executable(wallet-rpc src/main_wallet_rpc.cpp src/naza.rc) # .rc works only if referenced directly in add_executable
+    add_executable(nazad src/main_nazad.cpp src/naza.rc) # .rc works only if referenced directly in add_executable
 else()
     add_executable(wallet-rpc src/main_wallet_rpc.cpp)
-    add_executable(cryonerod src/main_cryonerod.cpp)
+    add_executable(nazad src/main_nazad.cpp)
 endif()
 #add_executable(tests src/main_tests.cpp tests/io.hpp tests/crypto/test_crypto.cpp tests/hash/test_hash.cpp tests/json/test_json.cpp)
 set(Boost_USE_STATIC_LIBS ON)
 add_definitions(-DBOOST_BIND_NO_PLACEHOLDERS=1 -DBOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE=1) # boost::_1 conflicts with std::_1
-target_link_libraries(wallet-rpc cryonero-crypto cryonero-core)
-target_link_libraries(cryonerod cryonero-crypto cryonero-core)
-#target_link_libraries(tests cryonero-crypto cryonero-core)
+target_link_libraries(wallet-rpc naza-crypto naza-core)
+target_link_libraries(nazad naza-crypto naza-core)
+#target_link_libraries(tests naza-crypto naza-core)
 if(WIN32)
 else()
     set(BOOST_ROOT ../boost)
@@ -192,8 +192,8 @@ else()
     if(APPLE)
         set(CMAKE_OSX_DEPLOYMENT_TARGET "10.11")
         target_link_libraries(wallet-rpc "-framework Foundation" "-framework IOKit")
-        target_link_libraries(cryonerod "-framework Foundation" "-framework IOKit")
+        target_link_libraries(nazad "-framework Foundation" "-framework IOKit")
     endif()
 	target_link_libraries(wallet-rpc ${Boost_LIBRARIES} ${LINK_OPENSSL} dl pthread)
-    target_link_libraries(cryonerod ${Boost_LIBRARIES} ${LINK_OPENSSL} dl pthread)
+    target_link_libraries(nazad ${Boost_LIBRARIES} ${LINK_OPENSSL} dl pthread)
 endif()

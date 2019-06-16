@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -11,7 +11,7 @@
 
 #include "crypto/crypto.hpp"
 
-namespace cryonero {
+namespace nazacoin {
 
 struct network_config {
 	uint32_t connections_count       = 0;
@@ -84,7 +84,7 @@ struct COMMAND_PING {
 	};
 };
 
-#if cryonero_ALLOW_DEBUG_COMMANDS
+#if nazacoin_ALLOW_DEBUG_COMMANDS
 
 struct proof_of_trust {
 	PeerIdType peer_id = 0;
@@ -147,20 +147,20 @@ struct COMMAND_REQUEST_PEER_ID {
 #endif
 }
 namespace seria {
-void ser_members(cryonero::network_config &v, seria::ISeria &s);
-void ser_members(cryonero::basic_node_data &v, seria::ISeria &s);
-void ser_members(cryonero::CORE_SYNC_DATA &v, seria::ISeria &s);
-void ser_members(cryonero::COMMAND_HANDSHAKE::request &v, seria::ISeria &s);
-void ser_members(cryonero::COMMAND_HANDSHAKE::response &v, seria::ISeria &s);
-void ser_members(cryonero::COMMAND_TIMED_SYNC::request &v, seria::ISeria &s);
-void ser_members(cryonero::COMMAND_TIMED_SYNC::response &v, seria::ISeria &s);
-void ser_members(cryonero::COMMAND_PING::request &v, seria::ISeria &s);
-void ser_members(cryonero::COMMAND_PING::response &v, seria::ISeria &s);
-#if cryonero_ALLOW_DEBUG_COMMANDS
-void ser_members(cryonero::proof_of_trust &v, seria::ISeria &s);
-void ser_members(cryonero::COMMAND_REQUEST_STAT_INFO::request &v, seria::ISeria &s);
-void ser_members(cryonero::COMMAND_REQUEST_STAT_INFO::response &v, seria::ISeria &s);
-void ser_members(cryonero::COMMAND_REQUEST_NETWORK_STATE::request &v, seria::ISeria &s);
-void ser_members(cryonero::COMMAND_REQUEST_NETWORK_STATE::response &v, seria::ISeria &s);
+void ser_members(nazacoin::network_config &v, seria::ISeria &s);
+void ser_members(nazacoin::basic_node_data &v, seria::ISeria &s);
+void ser_members(nazacoin::CORE_SYNC_DATA &v, seria::ISeria &s);
+void ser_members(nazacoin::COMMAND_HANDSHAKE::request &v, seria::ISeria &s);
+void ser_members(nazacoin::COMMAND_HANDSHAKE::response &v, seria::ISeria &s);
+void ser_members(nazacoin::COMMAND_TIMED_SYNC::request &v, seria::ISeria &s);
+void ser_members(nazacoin::COMMAND_TIMED_SYNC::response &v, seria::ISeria &s);
+void ser_members(nazacoin::COMMAND_PING::request &v, seria::ISeria &s);
+void ser_members(nazacoin::COMMAND_PING::response &v, seria::ISeria &s);
+#if nazacoin_ALLOW_DEBUG_COMMANDS
+void ser_members(nazacoin::proof_of_trust &v, seria::ISeria &s);
+void ser_members(nazacoin::COMMAND_REQUEST_STAT_INFO::request &v, seria::ISeria &s);
+void ser_members(nazacoin::COMMAND_REQUEST_STAT_INFO::response &v, seria::ISeria &s);
+void ser_members(nazacoin::COMMAND_REQUEST_NETWORK_STATE::request &v, seria::ISeria &s);
+void ser_members(nazacoin::COMMAND_REQUEST_NETWORK_STATE::response &v, seria::ISeria &s);
 #endif
 }

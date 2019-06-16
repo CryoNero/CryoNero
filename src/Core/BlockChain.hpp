@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -20,7 +20,7 @@ namespace crypto
 {
 	class CryptoNightContext;
 }
-namespace cryonero 
+namespace nazacoin 
 {
 	class Config;
 	class Currency;
@@ -178,4 +178,4 @@ namespace cryonero
 
 	};
 
-}  // namespace cryonero
+}  // namespace nazacoin

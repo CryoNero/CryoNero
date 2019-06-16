@@ -1,12 +1,12 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 #include "wallet_api_extensions.hpp"
 #include "WalletNode.hpp"
 
-using namespace cryonero;
+using namespace nazacoin;
 
 bool WalletNode::on_get_keys(http::Client *, http::RequestData &&, json_rpc::Request &&,
 	api::extensions::GetKeys::Request &&request, api::extensions::GetKeys::Response &response)

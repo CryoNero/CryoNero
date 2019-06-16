@@ -1,14 +1,14 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2019, The CryoNero developers.
+// Copyright (c) 2018-2019, The Naza developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
 
 #include "CryptoNote.hpp"
 
-namespace cryonero {
+namespace nazacoin {
 struct DifficultyCheck {
 	Height height;
 	const char *hash;
