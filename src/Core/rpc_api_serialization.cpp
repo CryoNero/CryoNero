@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "CryptoNoteTools.hpp"
@@ -12,7 +12,7 @@
 #include "Currency.hpp"
 #include "common/Base58.hpp"
 
-using namespace nazacoin;
+using namespace cryonerocoin;
 
 namespace seria {
 enum class SerializationTag2 : uint8_t { Base = 0xff, Key = 0x2 };
@@ -27,7 +27,7 @@ void ser_members(AccountPublicAddress &v, ISeria &s) {
 	seria_kv("spend", v.spend_public_key, s);
 	seria_kv("view", v.view_public_key, s);
 }
-void ser_members(nazacoin::SendProof &v, ISeria &s) {
+void ser_members(cryonerocoin::SendProof &v, ISeria &s) {
 	const uint64_t CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 126;  // TODO - hard to get reference to our currency here
 	std::string addr;
 	if (!s.is_input())
@@ -326,15 +326,15 @@ void ser_members(api::walletd::GetViewKeyPair::Response &v, ISeria &s) {
 	seria_kv("secret_view_key", v.secret_view_key, s);
 	seria_kv("public_view_key", v.public_view_key, s);
 }
-void ser_members(nazacoin::api::walletd::CreateAddresses::Request &v, ISeria &s) {
+void ser_members(cryonerocoin::api::walletd::CreateAddresses::Request &v, ISeria &s) {
 	seria_kv("secret_spend_keys", v.secret_spend_keys, s);
 	seria_kv("creation_timestamp", v.creation_timestamp, s);
 }
-void ser_members(nazacoin::api::walletd::CreateAddresses::Response &v, ISeria &s) {
+void ser_members(cryonerocoin::api::walletd::CreateAddresses::Response &v, ISeria &s) {
 	seria_kv("addresses", v.addresses, s);
 	seria_kv("secret_spend_keys", v.secret_spend_keys, s);
 }
-void ser_members(nazacoin::api::walletd::GetBalance::Request &v, ISeria &s) {
+void ser_members(cryonerocoin::api::walletd::GetBalance::Request &v, ISeria &s) {
 	seria_kv("address", v.address, s);
 	seria_kv("height_or_depth", v.height_or_depth, s);
 }
@@ -384,15 +384,15 @@ void ser_members(api::walletd::CreateSendProof::Request &v, ISeria &s) {
 }
 void ser_members(api::walletd::CreateSendProof::Response &v, ISeria &s) { seria_kv("sendproofs", v.sendproofs, s); }
 
-void ser_members(api::nazad::GetStatus::Request &v, ISeria &s) {
+void ser_members(api::cryonerod::GetStatus::Request &v, ISeria &s) {
 	seria_kv("top_block_hash", v.top_block_hash, s);
 	seria_kv("transaction_pool_version", v.transaction_pool_version, s);
 	seria_kv("outgoing_peer_count", v.outgoing_peer_count, s);
 	seria_kv("incoming_peer_count", v.incoming_peer_count, s);
 	seria_kv("lower_level_error", v.lower_level_error, s);
 }
-void ser_members(api::nazad::GetStatus::Response &v, ISeria &s) {
-	ser_members(static_cast<api::nazad::GetStatus::Request &>(v), s);
+void ser_members(api::cryonerod::GetStatus::Response &v, ISeria &s) {
+	ser_members(static_cast<api::cryonerod::GetStatus::Request &>(v), s);
 	seria_kv("top_block_height", v.top_block_height, s);
 	seria_kv("top_block_difficulty", v.top_block_difficulty, s);
 	seria_kv("top_block_timestamp", v.top_block_timestamp, s);
@@ -401,11 +401,11 @@ void ser_members(api::nazad::GetStatus::Response &v, ISeria &s) {
 	seria_kv("next_block_effective_median_size", v.next_block_effective_median_size, s);
 	seria_kv("top_known_block_height", v.top_known_block_height, s);
 }
-void ser_members(nazacoin::api::nazad::GetRawBlock::Request &v, ISeria &s) {
+void ser_members(cryonerocoin::api::cryonerod::GetRawBlock::Request &v, ISeria &s) {
 	seria_kv("hash", v.hash, s);
 }
 
-void ser_members(nazacoin::api::nazad::GetRawBlock::Response &v, ISeria &s) {
+void ser_members(cryonerocoin::api::cryonerod::GetRawBlock::Response &v, ISeria &s) {
 	seria_kv("header", v.header, s);
 	seria_kv("raw_header", v.raw_header, s);
 	seria_kv("raw_transactions", v.raw_transactions, s);
@@ -414,65 +414,65 @@ void ser_members(nazacoin::api::nazad::GetRawBlock::Response &v, ISeria &s) {
 	seria_kv("transaction_binary_sizes", v.transaction_binary_sizes, s);
 }
 
-void ser_members(api::nazad::SyncBlocks::Request &v, ISeria &s) {
+void ser_members(api::cryonerod::SyncBlocks::Request &v, ISeria &s) {
 	seria_kv("sparse_chain", v.sparse_chain, s);
 	seria_kv("first_block_timestamp", v.first_block_timestamp, s);
 	seria_kv("max_count", v.max_count, s);
 }
-void ser_members(api::nazad::SyncBlocks::Response &v, ISeria &s) {
+void ser_members(api::cryonerod::SyncBlocks::Response &v, ISeria &s) {
 	seria_kv("blocks", v.blocks, s);
 	seria_kv("start_height", v.start_height, s);
 	seria_kv("status", v.status, s);
 }
-void ser_members(api::nazad::GetRawTransaction::Request &v, ISeria &s) { seria_kv("hash", v.hash, s); }
-void ser_members(api::nazad::GetRawTransaction::Response &v, ISeria &s) {
+void ser_members(api::cryonerod::GetRawTransaction::Request &v, ISeria &s) { seria_kv("hash", v.hash, s); }
+void ser_members(api::cryonerod::GetRawTransaction::Response &v, ISeria &s) {
 	seria_kv("transaction", v.transaction, s);
 	seria_kv("raw_transaction", v.raw_transaction, s);
 }
 
-void ser_members(api::nazad::SyncMemPool::Request &v, ISeria &s) {
+void ser_members(api::cryonerod::SyncMemPool::Request &v, ISeria &s) {
 	if (!s.is_input())
 		std::sort(v.known_hashes.begin(), v.known_hashes.end());
 	seria_kv("known_hashes", v.known_hashes, s);
 	if (s.is_input() && !std::is_sorted(v.known_hashes.begin(), v.known_hashes.end()))
 		throw std::runtime_error("SyncMemPool::Request known_hashes must be sorted");
 }
-void ser_members(api::nazad::SyncMemPool::Response &v, ISeria &s) {
+void ser_members(api::cryonerod::SyncMemPool::Response &v, ISeria &s) {
 	seria_kv("removed_hashes", v.removed_hashes, s);
 	seria_kv("added_raw_transactions", v.added_raw_transactions, s);
 	seria_kv("added_transactions", v.added_transactions, s);
 	seria_kv("status", v.status, s);
 }
-void ser_members(api::nazad::GetRandomOutputs::Request &v, ISeria &s) {
+void ser_members(api::cryonerod::GetRandomOutputs::Request &v, ISeria &s) {
 	seria_kv("amounts", v.amounts, s);
 	seria_kv("outs_count", v.outs_count, s);
 	seria_kv("confirmed_height_or_depth", v.confirmed_height_or_depth, s);
 }
-void ser_members(api::nazad::GetRandomOutputs::Response &v, ISeria &s) { seria_kv("outputs", v.outputs, s); }
-void ser_members(api::nazad::SendTransaction::Request &v, ISeria &s) {
+void ser_members(api::cryonerod::GetRandomOutputs::Response &v, ISeria &s) { seria_kv("outputs", v.outputs, s); }
+void ser_members(api::cryonerod::SendTransaction::Request &v, ISeria &s) {
 	seria_kv("binary_transaction", v.binary_transaction, s);
 }
-void ser_members(api::nazad::SendTransaction::Response &v, ISeria &s) { seria_kv("send_result", v.send_result, s); }
-void ser_members(nazacoin::api::nazad::SendTransaction::Error &v, ISeria &s) {
+void ser_members(api::cryonerod::SendTransaction::Response &v, ISeria &s) { seria_kv("send_result", v.send_result, s); }
+void ser_members(cryonerocoin::api::cryonerod::SendTransaction::Error &v, ISeria &s) {
 	ser_members(static_cast<json_rpc::Error &>(v), s);
 	seria_kv("conflict_height", v.conflict_height, s);
 }
-void ser_members(nazacoin::api::nazad::CheckSendProof::Request &v, ISeria &s) {
+void ser_members(cryonerocoin::api::cryonerod::CheckSendProof::Request &v, ISeria &s) {
 	seria_kv("sendproof", v.sendproof, s);
 }
 
-void ser_members(nazacoin::api::walletd::GetTransaction::Request &v, ISeria &s) { seria_kv("hash", v.hash, s); }
-void ser_members(nazacoin::api::walletd::GetTransaction::Response &v, ISeria &s) {
+void ser_members(cryonerocoin::api::walletd::GetTransaction::Request &v, ISeria &s) { seria_kv("hash", v.hash, s); }
+void ser_members(cryonerocoin::api::walletd::GetTransaction::Response &v, ISeria &s) {
 	seria_kv("transaction", v.transaction, s);
 }
 
-void ser_members(nazacoin::api::nazad::GetBlockTemplate::Request &v, ISeria &s) {
+void ser_members(cryonerocoin::api::cryonerod::GetBlockTemplate::Request &v, ISeria &s) {
 	seria_kv("reserve_size", v.reserve_size, s);
 	seria_kv("wallet_address", v.wallet_address, s);
 	seria_kv("top_block_hash", v.top_block_hash, s);
 	seria_kv("transaction_pool_version", v.transaction_pool_version, s);
 }
-void ser_members(nazacoin::api::nazad::GetBlockTemplate::Response &v, ISeria &s) {
+void ser_members(cryonerocoin::api::cryonerod::GetBlockTemplate::Response &v, ISeria &s) {
 	seria_kv("difficulty", v.difficulty, s);
 	seria_kv("height", v.height, s);
 	seria_kv("reserved_offset", v.reserved_offset, s);
@@ -482,26 +482,26 @@ void ser_members(nazacoin::api::nazad::GetBlockTemplate::Response &v, ISeria &s)
 	seria_kv("transaction_pool_version", v.transaction_pool_version, s);
 	seria_kv("previous_block_hash", v.previous_block_hash, s);
 }
-void ser_members(nazacoin::api::nazad::GetCurrencyId::Response &v, ISeria &s) {
+void ser_members(cryonerocoin::api::cryonerod::GetCurrencyId::Response &v, ISeria &s) {
 	seria_kv("currency_id_blob", v.currency_id_blob, s);
 }
-void ser_members(nazacoin::api::nazad::SubmitBlock::Response &v, ISeria &s) { seria_kv("status", v.status, s); }
-void ser_members(nazacoin::api::nazad::SubmitBlock::Request &v, ISeria &s) {
+void ser_members(cryonerocoin::api::cryonerod::SubmitBlock::Response &v, ISeria &s) { seria_kv("status", v.status, s); }
+void ser_members(cryonerocoin::api::cryonerod::SubmitBlock::Request &v, ISeria &s) {
 	seria_kv("blocktemplate_blob", v.blocktemplate_blob, s);
 }
-void ser_members(nazacoin::api::nazad::BlockHeaderLegacy &v, ISeria &s) {
-	ser_members(static_cast<nazacoin::api::BlockHeader &>(v), s);
+void ser_members(cryonerocoin::api::cryonerod::BlockHeaderLegacy &v, ISeria &s) {
+	ser_members(static_cast<cryonerocoin::api::BlockHeader &>(v), s);
 	seria_kv("depth", v.depth, s);
 	seria_kv("orphan_status", v.orphan_status, s);
 }
-void ser_members(nazacoin::api::nazad::GetLastBlockHeaderLegacy::Response &v, ISeria &s) {
+void ser_members(cryonerocoin::api::cryonerod::GetLastBlockHeaderLegacy::Response &v, ISeria &s) {
 	seria_kv("status", v.status, s);
 	seria_kv("block_header", v.block_header, s);
 }
-void ser_members(nazacoin::api::nazad::GetBlockHeaderByHashLegacy::Request &v, ISeria &s) {
+void ser_members(cryonerocoin::api::cryonerod::GetBlockHeaderByHashLegacy::Request &v, ISeria &s) {
 	seria_kv("hash", v.hash, s);
 }
-void ser_members(nazacoin::api::nazad::GetBlockHeaderByHeightLegacy::Request &v, ISeria &s) {
+void ser_members(cryonerocoin::api::cryonerod::GetBlockHeaderByHeightLegacy::Request &v, ISeria &s) {
 	seria_kv("height", v.height, s);
 }
 

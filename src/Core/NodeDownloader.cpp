@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include <iostream>
@@ -10,7 +10,7 @@
 #include "seria/BinaryInputStream.hpp"
 #include "seria/BinaryOutputStream.hpp"
 
-using namespace nazacoin;
+using namespace cryonerocoin;
 
 static const bool multicore = true;
 
@@ -77,7 +77,7 @@ uint32_t Node::DownloaderV11::get_known_block_count(uint32_t my) const {
 	return my;
 }
 
-void Node::DownloaderV11::on_connect(P2PClientNazacoin *who) {
+void Node::DownloaderV11::on_connect(P2PClientCryonero *who) {
 	if (who->is_incoming())  
 		return;
 	m_node->m_log(logging::TRACE) << "DownloaderV11::on_connect " << who->get_address() << std::endl;
@@ -93,7 +93,7 @@ void Node::DownloaderV11::on_connect(P2PClientNazacoin *who) {
 	}
 }
 
-void Node::DownloaderV11::on_disconnect(P2PClientNazacoin *who) {
+void Node::DownloaderV11::on_disconnect(P2PClientCryonero *who) {
 	if (who->is_incoming())
 		return;
 	m_node->m_log(logging::TRACE) << "DownloaderV11::on_disconnect " << who->get_address() << std::endl;
@@ -125,7 +125,7 @@ void Node::DownloaderV11::on_chain_timer() {
 	}
 }
 
-void Node::DownloaderV11::on_msg_notify_request_chain(P2PClientNazacoin *who,
+void Node::DownloaderV11::on_msg_notify_request_chain(P2PClientCryonero *who,
     const NOTIFY_RESPONSE_CHAIN_ENTRY::request &req) {
 	if (m_chain_client != who || !m_chain_request_sent)
 		return;  // TODO - who just sent us chain we did not ask, ban
@@ -163,8 +163,8 @@ void Node::DownloaderV11::advance_chain() {
 	if (!m_chain.empty() || !m_download_chain.empty() || m_chain_request_sent)
 		return;
 	m_chain_client = nullptr;
-	std::vector<P2PClientNazacoin *> lagging_clients;
-	std::vector<P2PClientNazacoin *> worth_clients;
+	std::vector<P2PClientCryonero *> lagging_clients;
+	std::vector<P2PClientCryonero *> worth_clients;
 	const auto now = m_node->m_p2p.get_local_time();
 	for (auto &&who : m_good_clients) {
 		if (who.first->get_last_received_sync_data().current_height + GOOD_LAG < m_node->m_block_chain.get_tip_height())
@@ -197,7 +197,7 @@ void Node::DownloaderV11::advance_chain() {
 		m_chain_timer.once(SYNC_TIMEOUT);
 	}
 
-void Node::DownloaderV11::start_download(DownloadCell &dc, P2PClientNazacoin *who) {
+void Node::DownloaderV11::start_download(DownloadCell &dc, P2PClientCryonero *who) {
 	auto idea_now         = std::chrono::steady_clock::now();
 	dc.downloading_client = who;
 	dc.block_source       = who->get_address();
@@ -234,14 +234,14 @@ void Node::DownloaderV11::stop_download(DownloadCell &dc, bool success) {
 	dc.downloading_client = nullptr;
 }
 
-void Node::DownloaderV11::on_msg_notify_request_objects(P2PClientNazacoin *who,
+void Node::DownloaderV11::on_msg_notify_request_objects(P2PClientCryonero *who,
     const NOTIFY_RESPONSE_GET_OBJECTS::request &req) {
 	for (auto &&rb : req.blocks) {
 		Hash bid;
 		try {
 			BlockTemplate bheader;
 			seria::from_binary(bheader, rb.block);
-			bid = nazacoin::get_block_hash(bheader);
+			bid = cryonerocoin::get_block_hash(bheader);
 		} catch (const std::exception &ex) {
 			m_node->m_log(logging::INFO) << "Exception " << ex.what() << " while parsing returned block, banning "
 			                             << who->get_address() << std::endl;
@@ -401,7 +401,7 @@ void Node::DownloaderV11::advance_download() {
 
 	while (m_who_downloaded_block.size() > TOTAL_DOWNLOAD_BLOCKS)
 		m_who_downloaded_block.pop_front();
-	std::map<P2PClientNazacoin *, size_t> who_downloaded_counter;
+	std::map<P2PClientCryonero *, size_t> who_downloaded_counter;
 	for (auto lit = m_who_downloaded_block.begin(); lit != m_who_downloaded_block.end(); ++lit)
 		who_downloaded_counter[*lit] += 1;
 	auto idea_now = std::chrono::steady_clock::now();
@@ -411,7 +411,7 @@ void Node::DownloaderV11::advance_download() {
 			continue; 
 		if (total_downloading_blocks >= TOTAL_DOWNLOAD_BLOCKS)
 			break;
-		P2PClientNazacoin *ready_client = nullptr;
+		P2PClientCryonero *ready_client = nullptr;
 		size_t ready_counter            = std::numeric_limits<size_t>::max();
 		size_t ready_speed              = 1;
 		for (auto &&who : m_good_clients) {

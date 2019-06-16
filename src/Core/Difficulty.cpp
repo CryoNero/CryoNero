@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include <algorithm>
@@ -16,13 +16,13 @@
 #include "crypto/int-util.h"
 #include "seria/ISeria.hpp"
 
-using namespace nazacoin;
+using namespace cryonerocoin;
 
 static bool cadd(uint64_t a, uint64_t b) { return a + b < a; }
 
 static bool cadc(uint64_t a, uint64_t b, bool c) { return a + b < a || (c && a + b == (uint64_t)-1); }
 
-bool nazacoin::check_hash(const crypto::Hash &hash, Difficulty difficulty) {
+bool cryonerocoin::check_hash(const crypto::Hash &hash, Difficulty difficulty) {
 	uint64_t low, high, top, cur;
 	top = mul128(swap64le(((const uint64_t *)&hash)[3]), difficulty, &high);
 	if (high != 0) {

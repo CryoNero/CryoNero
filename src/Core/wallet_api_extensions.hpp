@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 #pragma once
 
@@ -9,7 +9,7 @@
 
 using namespace crypto;
 
-namespace nazacoin
+namespace cryonerocoin
 {
 	namespace api
 	{
@@ -35,6 +35,6 @@ namespace nazacoin
 
 namespace seria
 {
-	void ser_members(nazacoin::api::extensions::GetKeys::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::extensions::GetKeys::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::extensions::GetKeys::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::extensions::GetKeys::Response &v, ISeria &s);
 }

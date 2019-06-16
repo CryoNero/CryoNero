@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "CryptoNoteTools.hpp"
@@ -15,7 +15,7 @@
 #include "platform/PathTools.hpp"
 #include "platform/Time.hpp"
 
-using namespace nazacoin;
+using namespace cryonerocoin;
 
 static const uint8_t SERIALIZATION_VERSION_V2 = 6;
 

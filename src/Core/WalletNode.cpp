@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "WalletNode.hpp"
@@ -14,7 +14,7 @@
 #include "seria/KVBinaryInputStream.hpp"
 #include "seria/KVBinaryOutputStream.hpp"
 
-using namespace nazacoin;
+using namespace cryonerocoin;
 
 const WalletNode::HandlersMap WalletNode::m_jsonrpc3_handlers = {
     {api::walletd::GetStatus::method(), json_rpc::make_member_method(&WalletNode::handle_get_status3)},
@@ -56,13 +56,13 @@ bool WalletNode::on_api_http_request(http::Client *who, http::RequestData &&requ
 	request.r.http_version_major  = 1;
 	request.r.http_version_minor  = 1;
 	request.r.keep_alive          = true;
-	request.r.basic_authorization = m_config.nazad_authorization;
+	request.r.basic_authorization = m_config.cryonerod_authorization;
 	add_waiting_command(who, std::move(original_request), json_rpc::OptionalJsonValue{}, std::move(request),
 	    [=](const WaitingClient &wc, http::ResponseData &&send_response) mutable {
 		    send_response.r.http_version_major = wc.original_request.r.http_version_major;
 		    send_response.r.http_version_minor = wc.original_request.r.http_version_minor;
 		    send_response.r.keep_alive         = wc.original_request.r.keep_alive;
-		    // nazad never sends connection-close, so we are safe to retain all
+		    // cryonerod never sends connection-close, so we are safe to retain all
 		    // headers
 		    wc.original_who->write(std::move(send_response));
 		},
@@ -291,7 +291,7 @@ bool WalletNode::handle_create_transaction3(http::Client *who, http::RequestData
 	if (!response.transactions_required.empty())
 		return true;
 	if (m_last_node_status.next_block_effective_median_size == 0)
-		throw json_rpc::Error(json_rpc::INVALID_PARAMS, "Next block median size unknown, need to sync to nazad");
+		throw json_rpc::Error(json_rpc::INVALID_PARAMS, "Next block median size unknown, need to sync to cryonerod");
 	if (request.confirmed_height_or_depth < 0)
 		request.confirmed_height_or_depth = std::max(0,
 		    static_cast<api::HeightOrDepth>(m_wallet_state.get_tip_height()) + 1 + request.confirmed_height_or_depth);
@@ -304,7 +304,7 @@ bool WalletNode::handle_create_transaction3(http::Client *who, http::RequestData
 		throw json_rpc::Error(json_rpc::INVALID_PARAMS,
 		    "'fee_per_byte' set to 0, and it is impossible to "
 		    "set it to 'status.recommended_fee_per_byte', "
-		    "because walletd never connected to nazad after "
+		    "because walletd never connected to cryonerod after "
 		    "it was restarted");
 	AccountPublicAddress change_addr;  // We require change address, even if you are lucky and would get zero change
 	if (m_wallet_state.get_wallet().is_view_only())
@@ -410,12 +410,12 @@ bool WalletNode::handle_create_transaction3(http::Client *who, http::RequestData
 		for (auto &&da : decomposed_amounts)
 			builder.add_output(da, aa.first);
 	}
-	api::nazad::GetRandomOutputs::Request ra_request;
+	api::cryonerod::GetRandomOutputs::Request ra_request;
 	ra_request.confirmed_height_or_depth = request.confirmed_height_or_depth;
 	ra_request.outs_count =
 	    request.transaction.anonymity + 1; 
 	ra_request.amounts = selector.get_ra_amounts();
-	api::nazad::GetRandomOutputs::Response ra_response;
+	api::cryonerod::GetRandomOutputs::Response ra_response;
 	if (m_inproc_node) {
 		m_inproc_node->on_get_random_outputs3(
 		    nullptr, http::RequestData(raw_request), json_rpc::Request(), std::move(ra_request), ra_response);
@@ -442,8 +442,8 @@ bool WalletNode::handle_create_transaction3(http::Client *who, http::RequestData
 
 	api::walletd::CreateTransaction::Request request_copy = request;  // TODO ???
 	http::RequestData new_request =
-	    json_rpc::create_request(api::nazad::url(), api::nazad::GetRandomOutputs::method(), ra_request);
-	new_request.r.basic_authorization = m_config.nazad_authorization;
+	    json_rpc::create_request(api::cryonerod::url(), api::cryonerod::GetRandomOutputs::method(), ra_request);
+	new_request.r.basic_authorization = m_config.cryonerod_authorization;
 	m_log(logging::TRACE) << "sending get_random_outputs, body=" << new_request.body << std::endl;
 	add_waiting_command(who, std::move(raw_request), raw_js_request.get_id(), std::move(new_request),
 	    [=](const WaitingClient &wc, http::ResponseData &&random_response) mutable {
@@ -456,7 +456,7 @@ bool WalletNode::handle_create_transaction3(http::Client *who, http::RequestData
 		    api::walletd::CreateTransaction::Response last_response;
 		    Hash tx_hash{};
 		    json_rpc::Response json_resp(random_response.body);
-		    api::nazad::GetRandomOutputs::Response ra_response;
+		    api::cryonerod::GetRandomOutputs::Response ra_response;
 		    json_resp.get_result(ra_response);
 		    selector.add_mixed_inputs(m_wallet_state.get_wallet().get_view_secret_key(),
 		        request.any_spend_address ? m_wallet_state.get_wallet().get_records() : only_records, &builder,
@@ -477,7 +477,7 @@ bool WalletNode::handle_create_transaction3(http::Client *who, http::RequestData
 		    wc.original_who->write(std::move(last_http_response));
 		},
 	    [=](const WaitingClient &wc, std::string err) mutable {
-		    m_log(logging::INFO) << "got error to get_random_outputs from nazad, " << err << std::endl;
+		    m_log(logging::INFO) << "got error to get_random_outputs from cryonerod, " << err << std::endl;
 		    http::ResponseData last_http_response = json_rpc::create_error_response(
 		        wc.original_request, json_rpc::Error(json_rpc::INTERNAL_ERROR, err), wc.original_jsonrpc_id);
 		    wc.original_who->write(std::move(last_http_response));
@@ -514,8 +514,8 @@ bool WalletNode::handle_create_sendproof3(http::Client *, http::RequestData &&, 
 }
 
 bool WalletNode::handle_send_transaction3(http::Client *who, http::RequestData &&raw_request,
-    json_rpc::Request &&raw_js_request, api::nazad::SendTransaction::Request &&request,
-    api::nazad::SendTransaction::Response &response) {
+    json_rpc::Request &&raw_js_request, api::cryonerod::SendTransaction::Request &&request,
+    api::cryonerod::SendTransaction::Response &response) {
 	m_wallet_state.add_to_payment_queue(request.binary_transaction, true);
 	advance_long_poll();
 	if (m_inproc_node) {
@@ -525,8 +525,8 @@ bool WalletNode::handle_send_transaction3(http::Client *who, http::RequestData &
 	}
 	http::RequestData new_request;
 	new_request.set_body(std::move(raw_request.body));  // We save on copying body here
-	new_request.r.set_firstline("POST", api::nazad::url(), 1, 1);
-	new_request.r.basic_authorization = m_config.nazad_authorization;
+	new_request.r.set_firstline("POST", api::cryonerod::url(), 1, 1);
+	new_request.r.basic_authorization = m_config.cryonerod_authorization;
 	add_waiting_command(who, std::move(raw_request), raw_js_request.get_id(), std::move(new_request),
 	    [=](const WaitingClient &wc2, http::ResponseData &&send_response) mutable {
 		    http::ResponseData resp(std::move(send_response));

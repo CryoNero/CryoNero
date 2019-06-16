@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "BlockChainState.hpp"
@@ -30,7 +30,7 @@ static const std::string UNLOCK_TIME_PREFIX = "U";
 
 const size_t MAX_POOL_SIZE = 2000000;
 
-using namespace nazacoin;
+using namespace cryonerocoin;
 using namespace platform;
 
 
@@ -645,7 +645,7 @@ AddTransactionResult BlockChainState::add_transaction(const Hash &tid, const Tra
 		return AddTransactionResult::ALREADY_IN_POOL;
 	}
 	const size_t my_size = binary_tx.size();
-	const Amount my_fee = nazacoin::get_tx_fee(tx);
+	const Amount my_fee = cryonerocoin::get_tx_fee(tx);
 	const Amount my_fee_per_byte = my_fee / my_size;
 	Hash minimal_tid;
 	Amount minimal_fee = minimum_pool_fee_per_byte(&minimal_tid);

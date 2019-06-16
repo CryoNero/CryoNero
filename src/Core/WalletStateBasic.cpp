@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "WalletStateBasic.hpp"
@@ -51,16 +51,16 @@ static const std::string LOCKED_INDEX_KI_AM_GI = "li";
 static const std::string LOCKED_INDEX_HEIGHT_AM_GI_to_OUTPUT    = "lh";  
 static const std::string LOCKED_INDEX_TIMESTAMP_AM_GI_to_OUTPUT = "lt";  
 
-using namespace nazacoin;
+using namespace cryonerocoin;
 using namespace platform;
 
-void seria::ser_members(nazacoin::WalletStateBasic::HeightAmounGi &v, ISeria &s) {
+void seria::ser_members(cryonerocoin::WalletStateBasic::HeightAmounGi &v, ISeria &s) {
 	seria_kv("height", v.height, s);
 	seria_kv("amount", v.amount, s);
 	seria_kv("global_index", v.global_index, s);
 }
 
-void seria::ser_members(nazacoin::WalletStateBasic::UndoValue &v, seria::ISeria &s) {
+void seria::ser_members(cryonerocoin::WalletStateBasic::UndoValue &v, seria::ISeria &s) {
 	seria_kv("exists", v.exists, s);
 	seria_kv("value", v.value, s);
 }

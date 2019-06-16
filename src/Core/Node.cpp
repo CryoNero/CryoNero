@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "Node.hpp"
@@ -19,7 +19,7 @@
 #include "seria/KVBinaryOutputStream.hpp"
 #include "version.hpp"
 
-using namespace nazacoin;
+using namespace cryonerocoin;
 
 Node::Node(logging::ILogger &log, const Config &config, BlockChainState &block_chain)
     : m_block_chain(block_chain)
@@ -46,13 +46,13 @@ Node::Node(logging::ILogger &log, const Config &config, BlockChainState &block_c
 				m_block_chain_reader2.reset();
 		}
 	}
-	if (!config.nazad_bind_ip.empty() && config.nazad_bind_port != 0)
-		m_api.reset(new http::Server(config.nazad_bind_ip, config.nazad_bind_port,
+	if (!config.cryonerod_bind_ip.empty() && config.cryonerod_bind_port != 0)
+		m_api.reset(new http::Server(config.cryonerod_bind_ip, config.cryonerod_bind_port,
 		    std::bind(&Node::on_api_http_request, this, _1, _2, _3), std::bind(&Node::on_api_http_disconnect, this, _1),
 		    config.ssl_certificate_pem_file,
 		    config.ssl_certificate_password ? config.ssl_certificate_password.get() : std::string()));
 
-	m_commit_timer.once(DB_COMMIT_PERIOD_NAZAD);
+	m_commit_timer.once(DB_COMMIT_PERIOD_CRYONEROD);
 	advance_long_poll();
 }
 
@@ -75,7 +75,7 @@ bool Node::on_idle() {
 	return true;
 }
 
-void Node::sync_transactions(P2PClientNazacoin *who) {
+void Node::sync_transactions(P2PClientCryonero *who) {
 	NOTIFY_REQUEST_TX_POOL::request msg;
 	auto mytxs = m_block_chain.get_memory_state_transactions();
 	msg.txs.reserve(mytxs.size());
@@ -86,32 +86,32 @@ void Node::sync_transactions(P2PClientNazacoin *who) {
 	who->send(std::move(raw_msg));
 }
 
-void Node::P2PClientNazacoin::on_msg_bytes(size_t, size_t) {  // downloaded. uploaded
+void Node::P2PClientCryonero::on_msg_bytes(size_t, size_t) {  // downloaded. uploaded
 
 }
 
 CORE_SYNC_DATA
-Node::P2PClientNazacoin::get_sync_data() const {
+Node::P2PClientCryonero::get_sync_data() const {
 	CORE_SYNC_DATA sync_data;
 	sync_data.current_height = m_node->m_block_chain.get_tip_height();
 	sync_data.top_id         = m_node->m_block_chain.get_tip_bid();
 	return sync_data;
 }
 
-std::vector<PeerlistEntry> Node::P2PClientNazacoin::get_peers_to_share() const {
+std::vector<PeerlistEntry> Node::P2PClientCryonero::get_peers_to_share() const {
 	auto result = m_node->m_peer_db.get_peerlist_to_p2p(
 	    get_address(), m_node->m_p2p.get_local_time(), config.p2p_default_peers_in_handshake);
 	return result;
 }
 
-void Node::P2PClientNazacoin::on_first_message_after_handshake() {
+void Node::P2PClientCryonero::on_first_message_after_handshake() {
 
 	m_node->m_peer_db.set_peer_just_seen(
 	    get_last_received_unique_number(), get_address(), m_node->m_p2p.get_local_time());
 }
 
 
-void Node::P2PClientNazacoin::after_handshake() {
+void Node::P2PClientCryonero::after_handshake() {
 	m_node->m_p2p.peers_updated();
 	m_node->m_downloader.on_connect(this);
 	m_node->advance_long_poll();
@@ -121,17 +121,17 @@ void Node::P2PClientNazacoin::after_handshake() {
 
 
 
-void Node::P2PClientNazacoin::on_msg_handshake(COMMAND_HANDSHAKE::request &&req) {
+void Node::P2PClientCryonero::on_msg_handshake(COMMAND_HANDSHAKE::request &&req) {
 	m_node->m_peer_db.add_incoming_peer(get_address(), req.node_data.peer_id, m_node->m_p2p.get_local_time());
 	after_handshake();
 }
 
-void Node::P2PClientNazacoin::on_msg_handshake(COMMAND_HANDSHAKE::response &&req) {
+void Node::P2PClientCryonero::on_msg_handshake(COMMAND_HANDSHAKE::response &&req) {
 	m_node->m_peer_db.merge_peerlist_from_p2p(req.local_peerlist, m_node->m_p2p.get_local_time());
 	after_handshake();
 }
 
-void Node::P2PClientNazacoin::on_msg_notify_request_chain(NOTIFY_REQUEST_CHAIN::request &&req) {
+void Node::P2PClientCryonero::on_msg_notify_request_chain(NOTIFY_REQUEST_CHAIN::request &&req) {
 	NOTIFY_RESPONSE_CHAIN_ENTRY::request msg;
 	msg.m_block_ids = m_node->m_block_chain.get_sync_headers_chain(
 	    req.block_ids, &msg.start_height, config.p2p_block_ids_sync_default_count);
@@ -142,11 +142,11 @@ void Node::P2PClientNazacoin::on_msg_notify_request_chain(NOTIFY_REQUEST_CHAIN::
 	send(std::move(raw_msg));
 }
 
-void Node::P2PClientNazacoin::on_msg_notify_request_chain(NOTIFY_RESPONSE_CHAIN_ENTRY::request &&req) {
+void Node::P2PClientCryonero::on_msg_notify_request_chain(NOTIFY_RESPONSE_CHAIN_ENTRY::request &&req) {
 	m_node->m_downloader.on_msg_notify_request_chain(this, req);
 }
 
-void Node::P2PClientNazacoin::on_msg_notify_request_objects(NOTIFY_REQUEST_GET_OBJECTS::request &&req) {
+void Node::P2PClientCryonero::on_msg_notify_request_objects(NOTIFY_REQUEST_GET_OBJECTS::request &&req) {
 	NOTIFY_RESPONSE_GET_OBJECTS::request msg;
 	msg.current_blockchain_height = m_node->m_block_chain.get_tip_height() + 1;
 	for (auto &&bh : req.blocks) {
@@ -166,18 +166,18 @@ void Node::P2PClientNazacoin::on_msg_notify_request_objects(NOTIFY_REQUEST_GET_O
 	send(std::move(raw_msg));
 }
 
-void Node::P2PClientNazacoin::on_msg_notify_request_objects(NOTIFY_RESPONSE_GET_OBJECTS::request &&req) {
+void Node::P2PClientCryonero::on_msg_notify_request_objects(NOTIFY_RESPONSE_GET_OBJECTS::request &&req) {
 	m_node->m_downloader.on_msg_notify_request_objects(this, req);
 }
 
-void Node::P2PClientNazacoin::on_disconnect(const std::string &ban_reason) {
+void Node::P2PClientCryonero::on_disconnect(const std::string &ban_reason) {
 	m_node->m_downloader.on_disconnect(this);
 
 	P2PClientBasic::on_disconnect(ban_reason);
 	m_node->advance_long_poll();
 }
 
-void Node::P2PClientNazacoin::on_msg_notify_request_tx_pool(NOTIFY_REQUEST_TX_POOL::request &&req) {
+void Node::P2PClientCryonero::on_msg_notify_request_tx_pool(NOTIFY_REQUEST_TX_POOL::request &&req) {
 	NOTIFY_NEW_TRANSACTIONS::request msg;
 	auto mytxs = m_node->m_block_chain.get_memory_state_transactions();
 	msg.txs.reserve(mytxs.size());
@@ -198,14 +198,14 @@ void Node::P2PClientNazacoin::on_msg_notify_request_tx_pool(NOTIFY_REQUEST_TX_PO
 	send(std::move(raw_msg));
 }
 
-void Node::P2PClientNazacoin::on_msg_timed_sync(COMMAND_TIMED_SYNC::request &&req) {
+void Node::P2PClientCryonero::on_msg_timed_sync(COMMAND_TIMED_SYNC::request &&req) {
 	m_node->m_downloader.advance_download();
 }
-void Node::P2PClientNazacoin::on_msg_timed_sync(COMMAND_TIMED_SYNC::response &&req) {
+void Node::P2PClientCryonero::on_msg_timed_sync(COMMAND_TIMED_SYNC::response &&req) {
 	m_node->m_downloader.advance_download();
 }
 
-void Node::P2PClientNazacoin::on_msg_notify_new_block(NOTIFY_NEW_BLOCK::request &&req) {
+void Node::P2PClientCryonero::on_msg_notify_new_block(NOTIFY_NEW_BLOCK::request &&req) {
 	RawBlock raw_block{req.b.block, req.b.transactions};
 	PreparedBlock pb(std::move(raw_block), nullptr);
 	api::BlockHeader info;
@@ -230,7 +230,7 @@ void Node::P2PClientNazacoin::on_msg_notify_new_block(NOTIFY_NEW_BLOCK::request 
 	m_node->m_downloader.advance_download();
 }
 
-void Node::P2PClientNazacoin::on_msg_notify_new_transactions(NOTIFY_NEW_TRANSACTIONS::request &&req) {
+void Node::P2PClientCryonero::on_msg_notify_new_transactions(NOTIFY_NEW_TRANSACTIONS::request &&req) {
 	if (m_node->m_block_chain_reader1 || m_node->m_block_chain_reader2 ||
 	    m_node->m_block_chain.get_tip_height() < m_node->m_block_chain.internal_import_known_height())
 		return;  // We cannot check tx while downloading anyway
@@ -274,8 +274,8 @@ void Node::P2PClientNazacoin::on_msg_notify_new_transactions(NOTIFY_NEW_TRANSACT
 	m_node->advance_long_poll();
 }
 
-#if nazacoin_ALLOW_DEBUG_COMMANDS
-void Node::P2PClientNazacoin::on_msg_network_state(COMMAND_REQUEST_NETWORK_STATE::request &&req) {
+#if cryonerocoin_ALLOW_DEBUG_COMMANDS
+void Node::P2PClientCryonero::on_msg_network_state(COMMAND_REQUEST_NETWORK_STATE::request &&req) {
 	if (!m_node->check_trust(req.tr)) {
 		disconnect(std::string());
 		return;
@@ -294,7 +294,7 @@ void Node::P2PClientNazacoin::on_msg_network_state(COMMAND_REQUEST_NETWORK_STATE
 	send(std::move(raw_msg));
 }
 
-void Node::P2PClientNazacoin::on_msg_stat_info(COMMAND_REQUEST_STAT_INFO::request &&req) {
+void Node::P2PClientCryonero::on_msg_stat_info(COMMAND_REQUEST_STAT_INFO::request &&req) {
 	if (!m_node->check_trust(req.tr)) {
 		disconnect(std::string());
 		return;
@@ -338,13 +338,13 @@ void Node::advance_long_poll() {
 		prevent_sleep = nullptr;
 	if (m_long_poll_http_clients.empty())
 		return;
-	api::nazad::GetStatus::Response resp = create_status_response3();
+	api::cryonerod::GetStatus::Response resp = create_status_response3();
 	json_rpc::Response last_json_resp;
 	last_json_resp.set_result(resp);
 
 	for (auto lit = m_long_poll_http_clients.begin(); lit != m_long_poll_http_clients.end();) {
-		const bool method_status = lit->original_json_request.get_method() == api::nazad::GetStatus::method() ||
-		                           lit->original_json_request.get_method() == api::nazad::GetStatus::method2();
+		const bool method_status = lit->original_json_request.get_method() == api::cryonerod::GetStatus::method() ||
+		                           lit->original_json_request.get_method() == api::cryonerod::GetStatus::method2();
 		if (method_status && lit->original_get_status == resp) {
 			++lit;
 			continue;
@@ -366,9 +366,9 @@ void Node::advance_long_poll() {
 		} else {
 			json_rpc::Response gbt_json_resp;
 			try {
-				api::nazad::GetBlockTemplate::Request gbt_req;
+				api::cryonerod::GetBlockTemplate::Request gbt_req;
 				lit->original_json_request.load_params(gbt_req);
-				api::nazad::GetBlockTemplate::Response gbt_res;
+				api::cryonerod::GetBlockTemplate::Response gbt_res;
 				getblocktemplate(std::move(gbt_req), gbt_res);
 				gbt_json_resp.set_result(gbt_res);
 				gbt_json_resp.set_id(lit->original_json_request.get_id());
@@ -386,7 +386,7 @@ void Node::advance_long_poll() {
 
 static const std::string beautiful_index_start =
     R"(<html><body><table valign="middle"><tr>
-	<td>Naza Node &bull; version
+	<td>Cryonero Node &bull; version
 )";
 static const std::string beautiful_index_finish = " </td></tr></table></body></html>";
 static const std::string robots_txt             = "User-agent: *\r\nDisallow: /";
@@ -411,15 +411,15 @@ bool Node::on_api_http_request(http::Client *who, http::RequestData &&request, h
 	}
 	auto it = m_http_handlers.find(request.r.uri);
 	if (it == m_http_handlers.end()) {
-		auto leg = api::nazad::legacy_bin_methods();
+		auto leg = api::cryonerod::legacy_bin_methods();
 		if (std::find(leg.begin(), leg.end(), request.r.uri) != leg.end())
 			response.r.status = 410;
 		else
 		response.r.status = 404;
 		return true;
 	}
-	if (!m_config.nazad_authorization.empty() &&
-	    request.r.basic_authorization != m_config.nazad_authorization) {
+	if (!m_config.cryonerod_authorization.empty() &&
+	    request.r.basic_authorization != m_config.cryonerod_authorization) {
 		response.r.headers.push_back({"WWW-Authenticate", "Basic realm=\"Blockchain\", charset=\"UTF-8\""});
 		response.r.status = 401;
 		return true;
@@ -462,32 +462,32 @@ Node::HTTPHandlerFunction bin_method(bool (Node::*handler)(http::Client *who, ht
 
 const std::unordered_map<std::string, Node::HTTPHandlerFunction> Node::m_http_handlers = {
 
-    {api::nazad::SyncBlocks::bin_method(), bin_method(&Node::on_wallet_sync3)},
-    {api::nazad::SyncMemPool::bin_method(), bin_method(&Node::on_sync_mempool3)},
+    {api::cryonerod::SyncBlocks::bin_method(), bin_method(&Node::on_wallet_sync3)},
+    {api::cryonerod::SyncMemPool::bin_method(), bin_method(&Node::on_sync_mempool3)},
     {"/json_rpc", std::bind(&Node::process_json_rpc_request, std::placeholders::_1, std::placeholders::_2,
                       std::placeholders::_3, std::placeholders::_4)}};
 
 std::unordered_map<std::string, Node::JSONRPCHandlerFunction> Node::m_jsonrpc_handlers = {
-    {api::nazad::GetLastBlockHeaderLegacy::method(), json_rpc::make_member_method(&Node::on_get_last_block_header)},
-    {api::nazad::GetBlockHeaderByHashLegacy::method(),
+    {api::cryonerod::GetLastBlockHeaderLegacy::method(), json_rpc::make_member_method(&Node::on_get_last_block_header)},
+    {api::cryonerod::GetBlockHeaderByHashLegacy::method(),
         json_rpc::make_member_method(&Node::on_get_block_header_by_hash)},
-    {api::nazad::GetBlockHeaderByHeightLegacy::method(),
+    {api::cryonerod::GetBlockHeaderByHeightLegacy::method(),
         json_rpc::make_member_method(&Node::on_get_block_header_by_height)},
-    {api::nazad::GetBlockTemplate::method(), json_rpc::make_member_method(&Node::on_getblocktemplate)},
-    {api::nazad::GetBlockTemplate::method_legacy(), json_rpc::make_member_method(&Node::on_getblocktemplate)},
-    {api::nazad::GetCurrencyId::method(), json_rpc::make_member_method(&Node::on_get_currency_id)},
-    {api::nazad::GetCurrencyId::method_legacy(), json_rpc::make_member_method(&Node::on_get_currency_id)},
-    {api::nazad::SubmitBlock::method(), json_rpc::make_member_method(&Node::on_submitblock)},
-    {api::nazad::SubmitBlockLegacy::method(), json_rpc::make_member_method(&Node::on_submitblock_legacy)},
-    {api::nazad::GetRandomOutputs::method(), json_rpc::make_member_method(&Node::on_get_random_outputs3)},
-    {api::nazad::GetStatus::method(), json_rpc::make_member_method(&Node::on_get_status3)},
-    {api::nazad::GetStatus::method2(), json_rpc::make_member_method(&Node::on_get_status3)},
-    {api::nazad::SendTransaction::method(), json_rpc::make_member_method(&Node::handle_send_transaction3)},
-    {api::nazad::CheckSendProof::method(), json_rpc::make_member_method(&Node::handle_check_sendproof3)},
-    {api::nazad::SyncBlocks::method(), json_rpc::make_member_method(&Node::on_wallet_sync3)},
-    {api::nazad::GetRawTransaction::method(), json_rpc::make_member_method(&Node::on_get_raw_transaction3)},
+    {api::cryonerod::GetBlockTemplate::method(), json_rpc::make_member_method(&Node::on_getblocktemplate)},
+    {api::cryonerod::GetBlockTemplate::method_legacy(), json_rpc::make_member_method(&Node::on_getblocktemplate)},
+    {api::cryonerod::GetCurrencyId::method(), json_rpc::make_member_method(&Node::on_get_currency_id)},
+    {api::cryonerod::GetCurrencyId::method_legacy(), json_rpc::make_member_method(&Node::on_get_currency_id)},
+    {api::cryonerod::SubmitBlock::method(), json_rpc::make_member_method(&Node::on_submitblock)},
+    {api::cryonerod::SubmitBlockLegacy::method(), json_rpc::make_member_method(&Node::on_submitblock_legacy)},
+    {api::cryonerod::GetRandomOutputs::method(), json_rpc::make_member_method(&Node::on_get_random_outputs3)},
+    {api::cryonerod::GetStatus::method(), json_rpc::make_member_method(&Node::on_get_status3)},
+    {api::cryonerod::GetStatus::method2(), json_rpc::make_member_method(&Node::on_get_status3)},
+    {api::cryonerod::SendTransaction::method(), json_rpc::make_member_method(&Node::handle_send_transaction3)},
+    {api::cryonerod::CheckSendProof::method(), json_rpc::make_member_method(&Node::handle_check_sendproof3)},
+    {api::cryonerod::SyncBlocks::method(), json_rpc::make_member_method(&Node::on_wallet_sync3)},
+    {api::cryonerod::GetRawTransaction::method(), json_rpc::make_member_method(&Node::on_get_raw_transaction3)},
     
-    {api::nazad::SyncMemPool::method(), json_rpc::make_member_method(&Node::on_sync_mempool3)},
+    {api::cryonerod::SyncMemPool::method(), json_rpc::make_member_method(&Node::on_sync_mempool3)},
 	{ api::extensions::GetBlocks::method(), json_rpc::make_member_method(&Node::on_get_blocks_json) },
 	{ api::extensions::GetBlock::method(), json_rpc::make_member_method(&Node::on_get_block_json) },
 	{ api::extensions::GetTransaction::method(), json_rpc::make_member_method(&Node::on_get_transaction_json) },
@@ -496,7 +496,7 @@ std::unordered_map<std::string, Node::JSONRPCHandlerFunction> Node::m_jsonrpc_ha
 };
 
 bool Node::on_get_raw_block(http::Client *, http::RequestData &&, json_rpc::Request &&,
-	api::nazad::GetRawBlock::Request && request, api::nazad::GetRawBlock::Response & response) {
+	api::cryonerod::GetRawBlock::Request && request, api::cryonerod::GetRawBlock::Response & response) {
 
 	if (!m_block_chain.read_header(request.hash, &response.header))
 		throw json_rpc::Error(-5, "Block not found by hash"); // TODO - use HASH_NOT_FOUND enum
@@ -527,7 +527,7 @@ bool Node::on_get_raw_block(http::Client *, http::RequestData &&, json_rpc::Requ
 }
 
 bool Node::on_get_random_outputs3(http::Client *, http::RequestData &&, json_rpc::Request &&,
-    api::nazad::GetRandomOutputs::Request &&request, api::nazad::GetRandomOutputs::Response &response) {
+    api::cryonerod::GetRandomOutputs::Request &&request, api::cryonerod::GetRandomOutputs::Response &response) {
 	if (request.confirmed_height_or_depth < 0)
 		request.confirmed_height_or_depth = std::max(
 		    0, static_cast<api::HeightOrDepth>(m_block_chain.get_tip_height()) + 1 + request.confirmed_height_or_depth);
@@ -541,8 +541,8 @@ bool Node::on_get_random_outputs3(http::Client *, http::RequestData &&, json_rpc
 	return true;
 }
 
-api::nazad::GetStatus::Response Node::create_status_response3() const {
-	api::nazad::GetStatus::Response res;
+api::cryonerod::GetStatus::Response Node::create_status_response3() const {
+	api::cryonerod::GetStatus::Response res;
 	res.top_block_height = m_block_chain.get_tip_height();
 	res.top_known_block_height = m_downloader.get_known_block_count(res.top_block_height);
 	res.top_known_block_height =
@@ -567,7 +567,7 @@ api::nazad::GetStatus::Response Node::create_status_response3() const {
 }
 
 bool Node::on_get_status3(http::Client *who, http::RequestData &&raw_request, json_rpc::Request &&raw_js_request,
-    api::nazad::GetStatus::Request &&req, api::nazad::GetStatus::Response &res) {
+    api::cryonerod::GetStatus::Request &&req, api::cryonerod::GetStatus::Response &res) {
 	res = create_status_response3();
 	if (req == res) {
 		//		m_log(logging::INFO) << "on_get_status3 will long poll, json="
@@ -585,15 +585,15 @@ bool Node::on_get_status3(http::Client *who, http::RequestData &&raw_request, js
 }
 
 bool Node::on_wallet_sync3(http::Client *, http::RequestData &&, json_rpc::Request &&json_req,
-    api::nazad::SyncBlocks::Request &&req, api::nazad::SyncBlocks::Response &res) {
+    api::cryonerod::SyncBlocks::Request &&req, api::cryonerod::SyncBlocks::Response &res) {
 	if (req.sparse_chain.empty())
 		throw std::runtime_error("Empty sparse chain - must include at least genesis block");
 	if (req.sparse_chain.back() != m_block_chain.get_genesis_bid())
 		throw std::runtime_error(
 		    "Wrong currency - different genesis block. Must be " + common::pod_to_hex(m_block_chain.get_genesis_bid()));
-	if (req.max_count > api::nazad::SyncBlocks::Request::MAX_COUNT)
+	if (req.max_count > api::cryonerod::SyncBlocks::Request::MAX_COUNT)
 		throw std::runtime_error(
-		    "Too big max_count - must be < " + std::to_string(api::nazad::SyncBlocks::Request::MAX_COUNT));
+		    "Too big max_count - must be < " + std::to_string(api::cryonerod::SyncBlocks::Request::MAX_COUNT));
 	auto first_block_timestamp = req.first_block_timestamp < m_block_chain.get_currency().get_block_future_time_limit(m_block_chain.get_tip_height() + 1)
 	                                 ? 0
 	                                 : req.first_block_timestamp - m_block_chain.get_currency().get_block_future_time_limit(m_block_chain.get_tip_height() + 1);
@@ -645,7 +645,7 @@ bool Node::on_wallet_sync3(http::Client *, http::RequestData &&, json_rpc::Reque
 }
 
 bool Node::on_sync_mempool3(http::Client *, http::RequestData &&, json_rpc::Request &&,
-    api::nazad::SyncMemPool::Request &&req, api::nazad::SyncMemPool::Response &res) {
+    api::cryonerod::SyncMemPool::Request &&req, api::cryonerod::SyncMemPool::Response &res) {
 	const auto &pool = m_block_chain.get_memory_state_transactions();
 	for (auto &&ex : req.known_hashes)
 		if (pool.count(ex) == 0)
@@ -664,7 +664,7 @@ bool Node::on_sync_mempool3(http::Client *, http::RequestData &&, json_rpc::Requ
 }
 
 bool Node::on_get_raw_transaction3(http::Client *, http::RequestData &&, json_rpc::Request &&,
-    api::nazad::GetRawTransaction::Request &&req, api::nazad::GetRawTransaction::Response &res) {
+    api::cryonerod::GetRawTransaction::Request &&req, api::cryonerod::GetRawTransaction::Response &res) {
 	const auto &pool = m_block_chain.get_memory_state_transactions();
 	auto tit         = pool.find(req.hash);
 	if (tit != pool.end()) {
@@ -689,7 +689,7 @@ bool Node::on_get_raw_transaction3(http::Client *, http::RequestData &&, json_rp
 }
 
 bool Node::handle_send_transaction3(http::Client *, http::RequestData &&, json_rpc::Request &&,
-    api::nazad::SendTransaction::Request &&request, api::nazad::SendTransaction::Response &response) {
+    api::cryonerod::SendTransaction::Request &&request, api::cryonerod::SendTransaction::Response &response) {
 	response.send_result = "broadcast";
 
 	NOTIFY_NEW_TRANSACTIONS::request msg;
@@ -699,8 +699,8 @@ bool Node::handle_send_transaction3(http::Client *, http::RequestData &&, json_r
 	try {
 	seria::from_binary(tx, request.binary_transaction);
 	} catch (const std::exception &ex) {
-		api::nazad::SendTransaction::Error err;
-		err.code            = api::nazad::SendTransaction::INVALID_TRANSACTION_BINARY_FORMAT;
+		api::cryonerod::SendTransaction::Error err;
+		err.code            = api::cryonerod::SendTransaction::INVALID_TRANSACTION_BINARY_FORMAT;
 		err.message         = ex.what();
 		err.conflict_height = conflict_height;
 		throw err;
@@ -711,7 +711,7 @@ bool Node::handle_send_transaction3(http::Client *, http::RequestData &&, json_r
 	switch (action) {
 	case AddTransactionResult::BAN:
 		throw json_rpc::Error(
-		    api::nazad::SendTransaction::INVALID_TRANSACTION_BINARY_FORMAT, "Binary transaction format is wrong");
+		    api::cryonerod::SendTransaction::INVALID_TRANSACTION_BINARY_FORMAT, "Binary transaction format is wrong");
 	case AddTransactionResult::BROADCAST_ALL: {
 		msg.txs.push_back(request.binary_transaction);
 		BinaryArray raw_msg =
@@ -726,15 +726,15 @@ bool Node::handle_send_transaction3(http::Client *, http::RequestData &&, json_r
 	case AddTransactionResult::INCREASE_FEE:
 		break;
 	case AddTransactionResult::FAILED_TO_REDO: {
-		api::nazad::SendTransaction::Error err;
-		err.code            = api::nazad::SendTransaction::WRONG_OUTPUT_REFERENCE;
+		api::cryonerod::SendTransaction::Error err;
+		err.code            = api::cryonerod::SendTransaction::WRONG_OUTPUT_REFERENCE;
 		err.message         = "Transaction references outputs changed during reorganization or signature wrong";
 		err.conflict_height = conflict_height;
 		throw err;
 	}
 	case AddTransactionResult::OUTPUT_ALREADY_SPENT: {
-		api::nazad::SendTransaction::Error err;
-		err.code            = api::nazad::SendTransaction::OUTPUT_ALREADY_SPENT;
+		api::cryonerod::SendTransaction::Error err;
+		err.code            = api::cryonerod::SendTransaction::OUTPUT_ALREADY_SPENT;
 		err.message         = "One of referenced outputs is already spent";
 		err.conflict_height = conflict_height;
 		throw err;
@@ -744,13 +744,13 @@ bool Node::handle_send_transaction3(http::Client *, http::RequestData &&, json_r
 }
 
 bool Node::handle_check_sendproof3(http::Client *, http::RequestData &&, json_rpc::Request &&,
-    api::nazad::CheckSendProof::Request &&request, api::nazad::CheckSendProof::Response &response) {
+    api::cryonerod::CheckSendProof::Request &&request, api::cryonerod::CheckSendProof::Response &response) {
 	Transaction tx;
 	SendProof sp;
 	try {
 		seria::from_json_value(sp, common::JsonValue::from_string(request.sendproof));
 	} catch (const std::exception &ex) {
-		throw api::nazad::CheckSendProof::Error(api::nazad::CheckSendProof::FAILED_TO_PARSE,
+		throw api::cryonerod::CheckSendProof::Error(api::cryonerod::CheckSendProof::FAILED_TO_PARSE,
 		    "Failed to parse proof object ex.what=" + std::string(ex.what()));
 	}
 	Height height = 0;
@@ -759,14 +759,14 @@ bool Node::handle_check_sendproof3(http::Client *, http::RequestData &&, json_rp
 	uint32_t binary_size  = 0;
 	if (!m_block_chain.read_transaction(
 	        sp.transaction_hash, &tx, &height, &block_hash, &index_in_block, &binary_size)) {
-		throw api::nazad::CheckSendProof::Error(
-		    api::nazad::CheckSendProof::NOT_IN_MAIN_CHAIN, "Transaction is not in main chain");
+		throw api::cryonerod::CheckSendProof::Error(
+		    api::cryonerod::CheckSendProof::NOT_IN_MAIN_CHAIN, "Transaction is not in main chain");
 	}
 	PublicKey tx_public_key = get_transaction_public_key_from_extra(tx.extra);
 	Hash message_hash       = crypto::cn_fast_hash(sp.message.data(), sp.message.size());
 	if (!crypto::check_sendproof(
 	        tx_public_key, sp.address.view_public_key, sp.derivation, message_hash, sp.signature)) {
-		throw api::nazad::CheckSendProof::Error(api::nazad::CheckSendProof::WRONG_SIGNATURE,
+		throw api::cryonerod::CheckSendProof::Error(api::cryonerod::CheckSendProof::WRONG_SIGNATURE,
 		    "Proof object does not match transaction or was tampered with");
 	}
 	Amount total_amount = 0;
@@ -785,10 +785,10 @@ bool Node::handle_check_sendproof3(http::Client *, http::RequestData &&, json_rp
 		++out_index;
 	}
 	if (total_amount == 0)
-		throw api::nazad::CheckSendProof::Error(api::nazad::CheckSendProof::ADDRESS_NOT_IN_TRANSACTION,
+		throw api::cryonerod::CheckSendProof::Error(api::cryonerod::CheckSendProof::ADDRESS_NOT_IN_TRANSACTION,
 		    "No outputs found in transaction for the address being proofed");
 	if (total_amount != sp.amount)
-		throw api::nazad::CheckSendProof::Error(api::nazad::CheckSendProof::WRONG_AMOUNT,
+		throw api::cryonerod::CheckSendProof::Error(api::cryonerod::CheckSendProof::WRONG_AMOUNT,
 		    "Wrong amount in outputs, actual amount is " + common::to_string(total_amount));
 	return true;
 }

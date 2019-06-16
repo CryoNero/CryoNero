@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -14,7 +14,7 @@
 #include "rpc_api.hpp"
 
 
-namespace nazacoin {
+namespace cryonerocoin {
 
 	class Wallet;
 	class Currency;
@@ -95,7 +95,7 @@ namespace nazacoin {
 		void reset(Unspents &&unspents);
 		void add_mixed_inputs(const SecretKey &view_secret_key,
 			const std::unordered_map<PublicKey, WalletRecord> &wallet_records, TransactionBuilder *builder,
-			uint32_t anonymity, api::nazad::GetRandomOutputs::Response &&ra_response);
+			uint32_t anonymity, api::cryonerod::GetRandomOutputs::Response &&ra_response);
 
 		std::string select_optimal_outputs(Height block_height, Timestamp block_time, Height confirmed_height,
 			size_t effective_median_size, size_t anonymity, Amount total_amount, size_t total_outputs, Amount fee_per_byte,
@@ -104,4 +104,4 @@ namespace nazacoin {
 		const std::vector<Amount> &get_ra_amounts() const { return m_ra_amounts; }
 	};
 
-}  // namespace nazacoin
+}  // namespace cryonerocoin

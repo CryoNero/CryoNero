@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -21,7 +21,7 @@
 #include "platform/DB.hpp"
 #include "rpc_api.hpp"
 
-namespace nazacoin {
+namespace cryonerocoin {
 
 	class Config;
 
@@ -138,6 +138,6 @@ namespace nazacoin {
 }  
 
 namespace seria {
-	void ser_members(nazacoin::WalletStateBasic::HeightAmounGi &v, ISeria &s);
-	void ser_members(nazacoin::WalletStateBasic::UndoValue &v, seria::ISeria &s);
+	void ser_members(cryonerocoin::WalletStateBasic::HeightAmounGi &v, ISeria &s);
+	void ser_members(cryonerocoin::WalletStateBasic::UndoValue &v, seria::ISeria &s);
 } 

@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "BlockChainState.hpp"
@@ -10,7 +10,7 @@
 #include "TransactionExtra.hpp"
 #include "crypto/crypto.hpp"
 
-using namespace nazacoin;
+using namespace cryonerocoin;
 
 
 
@@ -67,7 +67,7 @@ void WalletPreparatorMulticore::thread_run() {
 		SecretKey view_secret_key;
 		Height height          = 0;
 		int local_work_counter = 0;
-		api::nazad::GetRawBlock::Response sync_block;
+		api::cryonerod::GetRawBlock::Response sync_block;
 		std::vector<std::vector<uint32_t>> global_indices;
 		{
 			std::unique_lock<std::mutex> lock(mu);
@@ -98,12 +98,12 @@ void WalletPreparatorMulticore::thread_run() {
 
 void WalletPreparatorMulticore::cancel_work() {
 	std::unique_lock<std::mutex> lock(mu);
-	work = api::nazad::SyncBlocks::Response();
+	work = api::cryonerod::SyncBlocks::Response();
 	prepared_blocks.clear();
 	work_counter += 1;
 }
 
-void WalletPreparatorMulticore::start_work(const api::nazad::SyncBlocks::Response &new_work,
+void WalletPreparatorMulticore::start_work(const api::cryonerod::SyncBlocks::Response &new_work,
     const SecretKey &view_secret_key) {
 	std::unique_lock<std::mutex> lock(mu);
 	work            = new_work;

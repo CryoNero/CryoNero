@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "P2PClientNew.hpp"
@@ -15,7 +15,7 @@ const float NO_INCOMING_HANDSHAKE_DISCONNECT_TIMEOUT = 30;
 const float NO_INCOMING_MESSAGE_DISCONNECT_TIMEOUT = 60 * 6;
 const float NO_OUTGOING_MESSAGE_PING_TIMEOUT = 60 * 4;
 
-using namespace nazacoin;
+using namespace cryonerocoin;
 
 static size_t parse_header(const BinaryArray &header_data, np::Header &header, std::string &ban_reason) {
 	if (header_data.size() != sizeof(np::Header)) {
@@ -48,7 +48,7 @@ static BinaryArray create_header(uint32_t cmd, size_t size) {
 }
 
 template<typename Cmd>
-nazacoin::P2PClientNew::HandlerFunction handler_method(void (nazacoin::P2PClientNew::*handler)(Cmd &&)) {
+cryonerocoin::P2PClientNew::HandlerFunction handler_method(void (cryonerocoin::P2PClientNew::*handler)(Cmd &&)) {
 	return [handler](P2PClientNew *who, BinaryArray &&body) {
 		Cmd req{};
 		seria::from_binary(req, body);
@@ -72,7 +72,7 @@ std::map<uint32_t, P2PClientNew::HandlerFunction> P2PClientNew::handler_function
 std::map<std::pair<uint32_t, bool>, P2PClientBasic::LevinHandlerFunction> P2PClientBasic::after_handshake_handlers = {
 	{{COMMAND_TIMED_SYNC::ID, false}, levin_method<COMMAND_TIMED_SYNC::request>(&P2PClientBasic::msg_timed_sync)},
 	{{COMMAND_TIMED_SYNC::ID, true}, levin_method<COMMAND_TIMED_SYNC::response>(&P2PClientBasic::msg_timed_sync)},
-#if nazacoin_ALLOW_DEBUG_COMMANDS
+#if cryonerocoin_ALLOW_DEBUG_COMMANDS
 	{{COMMAND_REQUEST_NETWORK_STATE::ID, false},
 		levin_method<COMMAND_REQUEST_NETWORK_STATE::request>(&P2PClientBasic::on_msg_network_state)},
 	{{COMMAND_REQUEST_NETWORK_STATE::ID, true},
@@ -289,7 +289,7 @@ void P2PClientNew::on_request_ready() {
 				}
 				continue;
 			}
-			std::cout << "Skipping unknown nazacoin::P2P cmd=" << header.command << " size=" << header.body_size
+			std::cout << "Skipping unknown cryonerocoin::P2P cmd=" << header.command << " size=" << header.body_size
 				<< std::endl;
 		}
 		catch (const std::exception &ex) {

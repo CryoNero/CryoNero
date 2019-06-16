@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -11,7 +11,7 @@
 #include "crypto/chacha8.h"
 #include "seria/ISeria.hpp"
 
-namespace nazacoin {
+namespace cryonerocoin {
 
 	class WalletSerializerV1 {
 	public:

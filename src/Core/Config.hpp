@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -14,7 +14,7 @@
 #include "common/CommandLine.hpp"
 #include "p2p/P2pProtocolTypes.hpp"
 
-namespace nazacoin
+namespace cryonerocoin
 {
 
 class Config 
@@ -38,11 +38,11 @@ public:
 
 	std::string ssl_certificate_pem_file;
 	boost::optional<std::string> ssl_certificate_password;
-	std::string nazad_authorization;
-	uint16_t nazad_bind_port;
-	std::string nazad_bind_ip;
-	uint16_t nazad_remote_port;
-	std::string nazad_remote_ip;
+	std::string cryonerod_authorization;
+	uint16_t cryonerod_bind_port;
+	std::string cryonerod_bind_ip;
+	uint16_t cryonerod_remote_port;
+	std::string cryonerod_remote_ip;
 
 	std::string walletd_authorization;
 	uint16_t walletd_bind_port;

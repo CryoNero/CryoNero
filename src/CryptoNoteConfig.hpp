@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -11,7 +11,7 @@
 #include <limits>
 
 
-namespace nazacoin
+namespace cryonerocoin
 {
 	namespace parameters
 	{
@@ -89,7 +89,7 @@ namespace nazacoin
 		const char CRYPTONOTE_BLOCKINDEXES_FILENAME[] = "blockindexes.bin";
 	}  // parameters
 
-	const char CRYPTONOTE_NAME[] = "naza";
+	const char CRYPTONOTE_NAME[] = "cryonero";
 
 	const uint8_t CURRENT_TRANSACTION_VERSION = 1;
 

@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -13,7 +13,7 @@
 #include "crypto/generic-ops.hpp"
 #include "seria/ISeria.hpp"
 
-namespace nazacoin {
+namespace cryonerocoin {
 
 	using PeerIdType = uint64_t;
 
@@ -51,11 +51,11 @@ namespace nazacoin {
 		return s << common::ip_address_and_port_to_string(na.ip, na.port);
 	}
 }
-CRYPTO_MAKE_COMPARABLE(nazacoin, UUID, std::memcmp)
+CRYPTO_MAKE_COMPARABLE(cryonerocoin, UUID, std::memcmp)
 
 namespace seria {
-	void ser(nazacoin::UUID &v, seria::ISeria &s);
-	void ser_members(nazacoin::PeerlistEntry &v, seria::ISeria &s);
-	void ser_members(nazacoin::NetworkAddress &v, seria::ISeria &s);
-	void ser_members(nazacoin::connection_entry &v, seria::ISeria &s);
+	void ser(cryonerocoin::UUID &v, seria::ISeria &s);
+	void ser_members(cryonerocoin::PeerlistEntry &v, seria::ISeria &s);
+	void ser_members(cryonerocoin::NetworkAddress &v, seria::ISeria &s);
+	void ser_members(cryonerocoin::connection_entry &v, seria::ISeria &s);
 }

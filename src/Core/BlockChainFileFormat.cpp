@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "BlockChainFileFormat.hpp"
@@ -12,7 +12,7 @@
 #include "seria/BinaryOutputStream.hpp"
 
 using namespace common;
-using namespace nazacoin;
+using namespace cryonerocoin;
 
 
 
@@ -196,8 +196,8 @@ LegacyBlockChainWriter::LegacyBlockChainWriter(const std::string &index_file_nam
 	m_indexes_file.write(&count, sizeof(count));
 }
 
-void LegacyBlockChainWriter::write_block(const nazacoin::RawBlock &raw_block) {
-	nazacoin::BinaryArray ba = seria::to_binary(raw_block);
+void LegacyBlockChainWriter::write_block(const cryonerocoin::RawBlock &raw_block) {
+	cryonerocoin::BinaryArray ba = seria::to_binary(raw_block);
 	m_items_file.write(ba.data(), ba.size());
 	uint32_t si = static_cast<uint32_t>(ba.size());
 	m_indexes_file.write(&si, sizeof si);

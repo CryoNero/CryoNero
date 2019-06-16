@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include <boost/algorithm/string.hpp>
@@ -19,10 +19,10 @@
 #include "platform/PathTools.hpp"
 #include "version.hpp"
 
-using namespace nazacoin;
+using namespace cryonerocoin;
 
 static const char USAGE[] =
-R"(wallet-rpc )" nazacoin_VERSION_STRING R"(.
+R"(wallet-rpc )" cryonerocoin_VERSION_STRING R"(.
 
 Usage:
   wallet-rpc [options] --wallet-file=<file>
@@ -40,20 +40,20 @@ Options:
 
   --wallet-rpc-bind-address=<ip:port>  Interface and port for wallet-rpc [default: 127.0.0.1:18642].
   --data-folder=<full-path>            Folder for wallet cache, blockchain, logs and peer DB [default: )" platform_DEFAULT_DATA_FOLDER_PATH_PREFIX
-	R"(naza].
-  --daemon-remote-address=<ip:port> Connect to remote nazad and suppress running built-in nazad.
+	R"(cryonero].
+  --daemon-remote-address=<ip:port> Connect to remote cryonerod and suppress running built-in cryonerod.
   --rpc-authorization=<usr:pass> HTTP authorization for RCP.
   --backup-wallet-data=<folder-path>           Perform hot backup of wallet file and wallet cache into specified backup data folder, then exit.
 
-Options for built-in nazad (run when no --daemon-remote-address specified):
+Options for built-in cryonerod (run when no --daemon-remote-address specified):
   --p2p-bind-address=<ip:port>         Interface and port for P2P network protocol [default: 0.0.0.0:18640].
   --p2p-external-port=<port>           External port for P2P network protocol, if port forwarding used with NAT [default: 18640].
-  --daemon-rpc-bind-address=<ip:port>  Interface and port for nazad RPC [default: 127.0.0.1:18641].
+  --daemon-rpc-bind-address=<ip:port>  Interface and port for cryonerod RPC [default: 127.0.0.1:18641].
   --seed-node-address=<ip:port>        Specify list (one or more) of nodes to start connecting to.
   --priority-node-address=<ip:port>    Specify list (one or more) of nodes to connect to and attempt to keep the connection open.
   --exclusive-node-address=<ip:port>   Specify list (one or more) of nodes to connect to only. All other nodes including seed nodes will be ignored.)";
 
-static const bool separate_thread_for_nazad = true;
+static const bool separate_thread_for_cryonerod = true;
 
 int main(int argc, const char *argv[]) try {
 	common::console::UnicodeConsoleSetup console_setup;
@@ -95,14 +95,14 @@ int main(int argc, const char *argv[]) try {
 		return api::WALLETD_WRONG_ARGS;
 	}
 
-	nazacoin::Config config(cmd);
+	cryonerocoin::Config config(cmd);
 
-	nazacoin::Currency currency(config.is_testnet);
+	cryonerocoin::Currency currency(config.is_testnet);
 
-	if (cmd.should_quit(USAGE, nazacoin::app_version()))
+	if (cmd.should_quit(USAGE, cryonerocoin::app_version()))
 		return api::WALLETD_WRONG_ARGS;
 	logging::LoggerManager logManagerNode;
-	logManagerNode.configure_default(config.get_data_folder("logs"), "nazad-");
+	logManagerNode.configure_default(config.get_data_folder("logs"), "cryonerod-");
 
 	if (wallet_file.empty()) {
 		std::cout << "--wallet-file=<file> argument is mandatory" << std::endl;
@@ -236,12 +236,12 @@ int main(int argc, const char *argv[]) try {
 	}
 	std::unique_ptr<platform::ExclusiveLock> blockchain_lock;
 	try {
-		if (!config.nazad_remote_port)
-			blockchain_lock = std::make_unique<platform::ExclusiveLock>(coin_folder, "nazad.lock");
+		if (!config.cryonerod_remote_port)
+			blockchain_lock = std::make_unique<platform::ExclusiveLock>(coin_folder, "cryonerod.lock");
 	}
 	catch (const platform::ExclusiveLock::FailedToLock &ex) {
-		std::cout << "Nazad already running - " << ex.what() << std::endl;
-		return api::NAZAD_ALREADY_RUNNING;
+		std::cout << "Cryonerod already running - " << ex.what() << std::endl;
+		return api::CRYONEROD_ALREADY_RUNNING;
 	}
 	std::unique_ptr<platform::ExclusiveLock> walletcache_lock;
 	try {
@@ -291,11 +291,11 @@ int main(int argc, const char *argv[]) try {
 	std::unique_ptr<Node> node;
 
 	std::promise<void> prm;
-	std::thread nazad_thread;
-	if (!config.nazad_remote_port) {
+	std::thread cryonerod_thread;
+	if (!config.cryonerod_remote_port) {
 		try {
-			if (separate_thread_for_nazad) {
-				nazad_thread = std::thread([&prm, &logManagerNode, &config, &currency] {
+			if (separate_thread_for_cryonerod) {
+				cryonerod_thread = std::thread([&prm, &logManagerNode, &config, &currency] {
 					boost::asio::io_service io;
 					platform::EventLoop separate_run_loop(io);
 
@@ -327,9 +327,9 @@ int main(int argc, const char *argv[]) try {
 		}
 		catch (const boost::system::system_error &ex) {
 			std::cout << ex.what() << std::endl;
-			if (nazad_thread.joinable())
-				nazad_thread.join(); 
-			return api::NAZAD_BIND_PORT_IN_USE;
+			if (cryonerod_thread.joinable())
+				cryonerod_thread.join(); 
+			return api::CRYONEROD_BIND_PORT_IN_USE;
 		}
 		catch (const std::exception &ex) {  
 			std::cout << "Exception in main() - " << ex.what() << std::endl;

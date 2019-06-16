@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -12,7 +12,7 @@
 #include "CryptoNote.hpp"
 #include "seria/ISeria.hpp"
 
-namespace nazacoin {
+namespace cryonerocoin {
 
 enum { TX_EXTRA_PADDING_MAX_COUNT = 255, TX_EXTRA_NONCE_MAX_COUNT = 255, TX_EXTRA_NONCE_PAYMENT_ID = 0x00 };
 
@@ -60,7 +60,7 @@ public:
 	TransactionExtra(const BinaryArray &extra) { parse(extra); }
 	bool parse(const BinaryArray &extra) {
 		m_fields.clear();
-		return nazacoin::parse_transaction_extra(extra, m_fields);
+		return cryonerocoin::parse_transaction_extra(extra, m_fields);
 	}
 	template<typename T>
 	bool get(T &value) const {
@@ -87,7 +87,7 @@ public:
 	}
 
 	bool get_public_key(crypto::PublicKey &pk) const {
-		nazacoin::TransactionExtraPublicKey extra_pk;
+		cryonerocoin::TransactionExtraPublicKey extra_pk;
 		if (!get(extra_pk)) {
 			return false;
 		}
@@ -102,20 +102,20 @@ public:
 	}
 
 private:
-	std::vector<nazacoin::TransactionExtraField>::const_iterator find(const std::type_info &t) const {
+	std::vector<cryonerocoin::TransactionExtraField>::const_iterator find(const std::type_info &t) const {
 		return std::find_if(
-		    m_fields.begin(), m_fields.end(), [&t](const nazacoin::TransactionExtraField &f) { return t == f.type(); });
+		    m_fields.begin(), m_fields.end(), [&t](const cryonerocoin::TransactionExtraField &f) { return t == f.type(); });
 	}
-	std::vector<nazacoin::TransactionExtraField>::iterator find(const std::type_info &t) {
+	std::vector<cryonerocoin::TransactionExtraField>::iterator find(const std::type_info &t) {
 		return std::find_if(
-		    m_fields.begin(), m_fields.end(), [&t](const nazacoin::TransactionExtraField &f) { return t == f.type(); });
+		    m_fields.begin(), m_fields.end(), [&t](const cryonerocoin::TransactionExtraField &f) { return t == f.type(); });
 	}
 
-	std::vector<nazacoin::TransactionExtraField> m_fields;
+	std::vector<cryonerocoin::TransactionExtraField> m_fields;
 };
 }
 
 namespace seria {
 class ISeria;
-void ser(nazacoin::TransactionExtraMergeMiningTag &v, ISeria &s);
+void ser(cryonerocoin::TransactionExtraMergeMiningTag &v, ISeria &s);
 }

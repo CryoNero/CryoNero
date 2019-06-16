@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include <boost/algorithm/string.hpp>
@@ -16,20 +16,20 @@
 #include "platform/PathTools.hpp"
 #include "version.hpp"
 
-using namespace nazacoin;
+using namespace cryonerocoin;
 
 static const char USAGE[] =
-R"(nazad )" nazacoin_VERSION_STRING R"(.
+R"(cryonerod )" cryonerocoin_VERSION_STRING R"(.
 
 Usage:
-  nazad [options]
-  nazad --help | -h
-  nazad --version | -v
+  cryonerod [options]
+  cryonerod --help | -h
+  cryonerod --version | -v
 
 Options:
   --p2p-bind-address=<ip:port>         Interface and port for P2P network protocol [default: 0.0.0.0:18640].
   --p2p-external-port=<port>           External port for P2P network protocol, if port forwarding used with NAT [default: 18640].
-  --daemon-rpc-bind-address=<ip:port>  Interface and port for nazad RPC [default: 127.0.0.1:18641].
+  --daemon-rpc-bind-address=<ip:port>  Interface and port for cryonerod RPC [default: 127.0.0.1:18641].
  
  --seed-node-address=<ip:port>        Specify list (one or more) of nodes to start connecting to.
   --priority-node-address=<ip:port>    Specify list (one or more) of nodes to connect to and attempt to keep the connection open.
@@ -37,7 +37,7 @@ Options:
   --export-blocks=<folder-path>        Perform hot export of blockchain into specified folder as blocks.bin and blockindexes.bin, then exit. This overwrites existing files.
   --backup-blockchain=<folder-path>         Perform hot backup of blockchain into specified backup data folder, then exit.
   --data-folder=<full-path>            Folder for blockchain, logs and peer DB [default: )" platform_DEFAULT_DATA_FOLDER_PATH_PREFIX
-	R"(naza].
+	R"(cryonero].
   --rpc-authorization=<usr:pass> HTTP authorization for RPC.
 )"
 #if platform_USE_SSL
@@ -59,20 +59,20 @@ int main(int argc, const char *argv[]) try {
 	std::string backup_blockchain;
 	if (const char *pa = cmd.get("--backup-blockchain"))
 		backup_blockchain = pa;
-	nazacoin::Config config(cmd);
-	nazacoin::Currency currency(config.is_testnet);
+	cryonerocoin::Config config(cmd);
+	cryonerocoin::Currency currency(config.is_testnet);
 
 	Height print_structure = Height(-1);
 	if (const char *pa = cmd.get("--print-structure"))
 		print_structure = std::stoi(pa);
 	const bool print_outputs = cmd.get_bool("--print-outputs");
-	if (cmd.should_quit(USAGE, nazacoin::app_version()))
+	if (cmd.should_quit(USAGE, cryonerocoin::app_version()))
 		return 0;
 
 	const std::string coin_folder = config.get_data_folder();
 	if (!export_blocks.empty() && !backup_blockchain.empty()) {
-		std::cout << "You can either export blocks or backup blockchain on one run of nazad" << std::endl;
-		return api::NAZAD_WRONG_ARGS;
+		std::cout << "You can either export blocks or backup blockchain on one run of cryonerod" << std::endl;
+		return api::CRYONEROD_WRONG_ARGS;
 	}
 	if (!backup_blockchain.empty()) {
 		std::cout << "Backing up " << (coin_folder + "/blockchain") << " to " << (backup_blockchain + "/blockchain")
@@ -115,10 +115,10 @@ int main(int argc, const char *argv[]) try {
 		config.ssl_certificate_password = ssl_certificate_password;
 	}
 
-	platform::ExclusiveLock coin_lock(coin_folder, "nazad.lock");
+	platform::ExclusiveLock coin_lock(coin_folder, "cryonerod.lock");
 
 	logging::LoggerManager log_manager;
-	log_manager.configure_default(config.get_data_folder("logs"), "nazad-");
+	log_manager.configure_default(config.get_data_folder("logs"), "cryonerod-");
 
 	BlockChainState block_chain(log_manager, config, currency, false);
 	if (import_blocks) 
@@ -134,7 +134,7 @@ int main(int argc, const char *argv[]) try {
 
 	auto idea_ms =
 		std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - idea_start);
-	std::cout << "nazad started seconds=" << double(idea_ms.count()) / 1000 << std::endl;
+	std::cout << "cryonerod started seconds=" << double(idea_ms.count()) / 1000 << std::endl;
 	while (!io.stopped())
 	{
 		if (node.on_idle())
@@ -146,8 +146,8 @@ int main(int argc, const char *argv[]) try {
 }
 catch (const platform::ExclusiveLock::FailedToLock &ex) 
 {
-	std::cout << "nazad already running - " << ex.what() << std::endl;
-	return api::NAZAD_ALREADY_RUNNING;
+	std::cout << "cryonerod already running - " << ex.what() << std::endl;
+	return api::CRYONEROD_ALREADY_RUNNING;
 }
 catch (const std::exception &ex)
 { 

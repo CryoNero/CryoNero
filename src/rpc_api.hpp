@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -17,7 +17,7 @@
 #include "crypto/types.hpp"
 #include "http/JsonRpc.hpp"
 
-namespace nazacoin 
+namespace cryonerocoin 
 {
 	namespace api 
 	{
@@ -126,17 +126,17 @@ namespace nazacoin
 	}
 }
 
-namespace nazacoin
+namespace cryonerocoin
 {
 	namespace api
 	{
 
 		enum return_code {
-			NAZAD_DATABASE_ERROR = 101,  
-			NAZAD_ALREADY_RUNNING = 102,
+			CRYONEROD_DATABASE_ERROR = 101,  
+			CRYONEROD_ALREADY_RUNNING = 102,
 			WALLETD_BIND_PORT_IN_USE = 103,
-			NAZAD_BIND_PORT_IN_USE = 104,
-			NAZAD_WRONG_ARGS = 105,
+			CRYONEROD_BIND_PORT_IN_USE = 104,
+			CRYONEROD_WRONG_ARGS = 105,
 			WALLET_FILE_READ_ERROR = 205,
 			WALLET_FILE_UNKNOWN_VERSION = 206,
 			WALLET_FILE_DECRYPT_ERROR = 207,
@@ -377,15 +377,15 @@ namespace nazacoin
 	}
 }
 
-// These messages encoded in JSON can be sent via http url /json_rpc3 to nazad rpc address:port
+// These messages encoded in JSON can be sent via http url /json_rpc3 to cryonerod rpc address:port
 // or to binMethod() url encoded in unspecified binary format
-namespace nazacoin {
+namespace cryonerocoin {
 	namespace api {
-		namespace nazad {
+		namespace cryonerod {
 
 			inline std::string url() { return "/json_rpc"; }
 			inline std::vector<std::string> legacy_bin_methods() { return { "/sync_mem_pool.bin", "/sync_blocks.bin" }; }
-			// When we advance method versions, we add legacy version here to get "upgrade nazad" message in walletd"
+			// When we advance method versions, we add legacy version here to get "upgrade cryonerod" message in walletd"
 
 			struct GetStatus {
 				static std::string method() { return "get_node_status"; }  // getNodeStatus works directly or through wallet tunnel
@@ -411,7 +411,7 @@ namespace nazacoin {
 				};
 			};
 
-			struct SyncBlocks {  // Used by walletd, block explorer, etc to sync to nazad
+			struct SyncBlocks {  // Used by walletd, block explorer, etc to sync to cryonerod
 				static std::string method() { return "sync_blocks"; }
 				static std::string bin_method() { return "/sync_blocks_v1.bin"; }
 				// we increment method version when binary format changes
@@ -580,59 +580,59 @@ namespace seria {
 
 	class ISeria;
 
-	void ser_members(nazacoin::api::EmptyStruct &v, ISeria &s);
-	void ser_members(nazacoin::api::Output &v, ISeria &s);
-	void ser_members(nazacoin::api::BlockHeader &v, ISeria &s);
-	void ser_members(nazacoin::api::Transfer &v, ISeria &s);
-	void ser_members(nazacoin::api::Transaction &v, ISeria &s);
-	void ser_members(nazacoin::api::Block &v, ISeria &s);
-	void ser_members(nazacoin::api::Balance &v, ISeria &s);
+	void ser_members(cryonerocoin::api::EmptyStruct &v, ISeria &s);
+	void ser_members(cryonerocoin::api::Output &v, ISeria &s);
+	void ser_members(cryonerocoin::api::BlockHeader &v, ISeria &s);
+	void ser_members(cryonerocoin::api::Transfer &v, ISeria &s);
+	void ser_members(cryonerocoin::api::Transaction &v, ISeria &s);
+	void ser_members(cryonerocoin::api::Block &v, ISeria &s);
+	void ser_members(cryonerocoin::api::Balance &v, ISeria &s);
 
-	void ser_members(nazacoin::api::walletd::GetAddresses::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::walletd::GetViewKeyPair::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::walletd::CreateAddresses::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::walletd::CreateAddresses::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::walletd::GetBalance::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::walletd::GetBalance::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::walletd::GetUnspents::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::walletd::GetUnspents::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::walletd::GetTransfers::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::walletd::GetTransfers::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::walletd::CreateTransaction::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::walletd::CreateTransaction::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::walletd::CreateSendProof::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::walletd::CreateSendProof::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::walletd::GetTransaction::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::walletd::GetTransaction::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::GetAddresses::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::GetViewKeyPair::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::CreateAddresses::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::CreateAddresses::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::GetBalance::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::GetBalance::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::GetUnspents::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::GetUnspents::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::GetTransfers::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::GetTransfers::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::CreateTransaction::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::CreateTransaction::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::CreateSendProof::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::CreateSendProof::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::GetTransaction::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::walletd::GetTransaction::Response &v, ISeria &s);
 
-	void ser_members(nazacoin::api::nazad::GetStatus::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::GetStatus::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::GetStatus::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::GetStatus::Response &v, ISeria &s);
 
-	void ser_members(nazacoin::api::nazad::GetRawBlock::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::GetRawBlock::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::GetRawBlock::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::GetRawBlock::Response &v, ISeria &s);
 
-	void ser_members(nazacoin::api::nazad::SyncBlocks::Request &v, ISeria &s);
-	//void ser_members(nazacoin::api::nazad::SyncBlocks::SyncBlock &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::SyncBlocks::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::GetRawTransaction::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::GetRawTransaction::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::SyncMemPool::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::SyncMemPool::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::GetRandomOutputs::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::GetRandomOutputs::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::SendTransaction::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::SendTransaction::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::SendTransaction::Error &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::CheckSendProof::Request &v, ISeria &s);
-	// void ser_members(nazacoin::api::nazad::CheckSendProof::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::GetBlockTemplate::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::GetBlockTemplate::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::GetCurrencyId::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::SubmitBlock::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::SubmitBlock::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::BlockHeaderLegacy &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::GetLastBlockHeaderLegacy::Response &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::GetBlockHeaderByHashLegacy::Request &v, ISeria &s);
-	void ser_members(nazacoin::api::nazad::GetBlockHeaderByHeightLegacy::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::SyncBlocks::Request &v, ISeria &s);
+	//void ser_members(cryonerocoin::api::cryonerod::SyncBlocks::SyncBlock &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::SyncBlocks::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::GetRawTransaction::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::GetRawTransaction::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::SyncMemPool::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::SyncMemPool::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::GetRandomOutputs::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::GetRandomOutputs::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::SendTransaction::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::SendTransaction::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::SendTransaction::Error &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::CheckSendProof::Request &v, ISeria &s);
+	// void ser_members(cryonerocoin::api::cryonerod::CheckSendProof::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::GetBlockTemplate::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::GetBlockTemplate::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::GetCurrencyId::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::SubmitBlock::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::SubmitBlock::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::BlockHeaderLegacy &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::GetLastBlockHeaderLegacy::Response &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::GetBlockHeaderByHashLegacy::Request &v, ISeria &s);
+	void ser_members(cryonerocoin::api::cryonerod::GetBlockHeaderByHeightLegacy::Request &v, ISeria &s);
 
 }  // namespace seria

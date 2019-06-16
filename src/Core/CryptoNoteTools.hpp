@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -11,7 +11,7 @@
 #include "crypto/hash.hpp"
 #include "seria/BinaryOutputStream.hpp"
 
-namespace nazacoin {
+namespace cryonerocoin {
 
 template<class T>
 Hash get_object_hash(const T &object, size_t *size = nullptr) {
@@ -56,5 +56,5 @@ inline ParentBlockSerializer make_parent_block_serializer(
 
 namespace seria {
 class ISeria;
-void ser_members(nazacoin::ParentBlockSerializer &v, ISeria &s);
+void ser_members(cryonerocoin::ParentBlockSerializer &v, ISeria &s);
 }

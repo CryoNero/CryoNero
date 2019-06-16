@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -9,7 +9,7 @@
 #include "P2P.hpp"
 #include "P2pProtocolNew.hpp"
 
-namespace nazacoin {
+namespace cryonerocoin {
 
 class Config;
 class Currency;
@@ -50,7 +50,7 @@ protected:
 	virtual void on_msg_handshake(np::Handshake::Response &&req) {}
 	virtual void on_msg_find_diff(np::FindDiff::Request &&) {}   // called after some internal processing
 	virtual void on_msg_find_diff(np::FindDiff::Response &&) {}  // called after some internal processing
-#if nazacoin_ALLOW_DEBUG_COMMANDS
+#if cryonerocoin_ALLOW_DEBUG_COMMANDS
 #endif
 	virtual np::TopBlockDesc get_top_block_desc() const = 0;
 	virtual std::vector<np::NetworkAddress> get_peers_to_share() const { return std::vector<np::NetworkAddress>(); }

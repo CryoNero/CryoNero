@@ -1,13 +1,13 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 #pragma once
 
 #include <cstdint>
 
-namespace nazacoin {
+namespace cryonerocoin {
 
 	const uint32_t PORTABLE_STORAGE_SIGNATUREA = 0x01011101;
 	const uint32_t PORTABLE_STORAGE_SIGNATUREB = 0x01020101;  // bender's nightmare

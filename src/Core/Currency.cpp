@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "Currency.hpp"
@@ -25,7 +25,7 @@
 #include "seria/BinaryOutputStream.hpp"
 
 using namespace common;
-using namespace nazacoin;
+using namespace cryonerocoin;
 
 const std::vector<Amount> Currency::PRETTY_AMOUNTS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90,
     100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 20000,
@@ -161,8 +161,8 @@ uint32_t Currency::block_granted_full_reward_zone_by_block_version(uint8_t block
 	if (block_major_version >= 3)
 		return block_granted_full_reward_zone;
 	if (block_major_version == 2)
-		return nazacoin::parameters::CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2;
-	return nazacoin::parameters::CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1;
+		return cryonerocoin::parameters::CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2;
+	return cryonerocoin::parameters::CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1;
 }
 
 Amount Currency::calc_base_reward(uint8_t block_major_version, Amount already_generated_coins) const
@@ -170,8 +170,8 @@ Amount Currency::calc_base_reward(uint8_t block_major_version, Amount already_ge
 	Amount base_reward = (money_supply - already_generated_coins) >> emission_speed_factor;
 	if (block_major_version >= 4)
 	{
-		if (base_reward >= nazacoin::parameters::DIFFICULTY_SCATTER_V2)
-			base_reward = base_reward / nazacoin::parameters::DIFFICULTY_SCATTER_V2;
+		if (base_reward >= cryonerocoin::parameters::DIFFICULTY_SCATTER_V2)
+			base_reward = base_reward / cryonerocoin::parameters::DIFFICULTY_SCATTER_V2;
 	}
 	return base_reward;
 }
@@ -345,7 +345,7 @@ bool Currency::parse_account_address_string(const std::string &str, AccountPubli
 	return true;
 }
 
-static std::string ffw(nazacoin::Amount am, size_t digs) {
+static std::string ffw(cryonerocoin::Amount am, size_t digs) {
 	std::string result = common::to_string(am);
 	if (result.size() < digs)
 		result = std::string(digs - result.size(), '0') + result;
@@ -353,8 +353,8 @@ static std::string ffw(nazacoin::Amount am, size_t digs) {
 }
 
 std::string Currency::format_amount(size_t number_of_decimal_places, Amount amount) {
-	nazacoin::Amount ia = amount / DECIMAL_PLACES.at(number_of_decimal_places);
-	nazacoin::Amount fa = amount - ia * DECIMAL_PLACES.at(number_of_decimal_places);
+	cryonerocoin::Amount ia = amount / DECIMAL_PLACES.at(number_of_decimal_places);
+	cryonerocoin::Amount fa = amount - ia * DECIMAL_PLACES.at(number_of_decimal_places);
 	std::string result;
 	while (ia >= 1000) {
 		result = "'" + ffw(ia % 1000, 3) + result;
@@ -624,20 +624,20 @@ bool Currency::is_dust(Amount amount) {
 	       amount < 1000000;  // After fork, dust definition will change
 }
 
-Hash nazacoin::get_transaction_inputs_hash(const TransactionPrefix &tx) {
+Hash cryonerocoin::get_transaction_inputs_hash(const TransactionPrefix &tx) {
 	BinaryArray ba = seria::to_binary(tx.inputs);
 	Hash new_hash  = crypto::cn_fast_hash(ba.data(), ba.size());
 	return new_hash;
 }
 
-Hash nazacoin::get_transaction_prefix_hash(const TransactionPrefix &tx) {
+Hash cryonerocoin::get_transaction_prefix_hash(const TransactionPrefix &tx) {
 	const TransactionPrefix &prefix = tx;
 	BinaryArray ba                  = seria::to_binary(prefix);
 	Hash new_hash                   = crypto::cn_fast_hash(ba.data(), ba.size());
 	return new_hash;
 }
 
-Hash nazacoin::get_transaction_hash(const Transaction &tx) {
+Hash cryonerocoin::get_transaction_hash(const Transaction &tx) {
 	BinaryArray ba = seria::to_binary(tx);
 	Hash new_hash  = crypto::cn_fast_hash(ba.data(), ba.size());
 	return new_hash;
@@ -663,7 +663,7 @@ static BinaryArray get_block_hashing_binary_array(const BlockTemplate &bh) {
 	return ba;
 }
 
-Hash nazacoin::get_block_hash(const BlockTemplate &bh) {
+Hash cryonerocoin::get_block_hash(const BlockTemplate &bh) {
 	BinaryArray ba2 = get_block_hashing_binary_array(bh);
 
 	if (bh.major_version >= 2) {
@@ -675,11 +675,11 @@ Hash nazacoin::get_block_hash(const BlockTemplate &bh) {
 	return new_hash2;
 }
 
-Hash nazacoin::get_auxiliary_block_header_hash(const BlockTemplate &bh) {
+Hash cryonerocoin::get_auxiliary_block_header_hash(const BlockTemplate &bh) {
 	return get_object_hash(get_block_hashing_binary_array(bh));
 }
 
-Hash nazacoin::get_block_long_hash(const BlockTemplate &bh, crypto::CryptoNightContext &crypto_ctx) {
+Hash cryonerocoin::get_block_long_hash(const BlockTemplate &bh, crypto::CryptoNightContext &crypto_ctx) {
 	if (bh.major_version == 1) {
 		auto raw_hashing_block = get_block_hashing_binary_array(bh);
 		return crypto_ctx.cn_slow_hash(raw_hashing_block.data(), raw_hashing_block.size());
@@ -708,7 +708,7 @@ Timestamp Currency::get_block_future_time_limit(Height height) const
 	return height >= hardfork_v2_height ? block_future_time_limit_v2 : block_future_time_limit;
 }
 
-Height nazacoin::Currency::get_difficulty_blocks_count(Height height) const
+Height cryonerocoin::Currency::get_difficulty_blocks_count(Height height) const
 {
 	if (height <= hardfork_v2_height)
 	{

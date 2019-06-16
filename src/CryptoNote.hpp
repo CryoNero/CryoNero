@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #pragma once
@@ -13,10 +13,10 @@
 #include "common/Invariant.hpp"
 #include "crypto/types.hpp"
 
-#define nazacoin_ALLOW_DEBUG_COMMANDS 1
+#define cryonerocoin_ALLOW_DEBUG_COMMANDS 1
 #define UPGRADE_TO_VERSION_4 1
 
-namespace nazacoin
+namespace cryonerocoin
 {
 	using crypto::Hash;
 	using crypto::PublicKey;
@@ -159,26 +159,26 @@ namespace seria
 {
 	class ISeria;
 
-	void ser(nazacoin::Hash &v, ISeria &s);
-	void ser(nazacoin::KeyImage &v, ISeria &s);
-	void ser(nazacoin::PublicKey &v, ISeria &s);
-	void ser(nazacoin::SecretKey &v, ISeria &s);
-	void ser(nazacoin::KeyDerivation &v, ISeria &s);
-	void ser(nazacoin::Signature &v, ISeria &s);
-	void ser_members(nazacoin::AccountPublicAddress &v, ISeria &s);
-	void ser_members(nazacoin::SendProof &v, ISeria &s);
-	void ser_members(nazacoin::TransactionInput &v, ISeria &s);
-	void ser_members(nazacoin::TransactionOutput &v, ISeria &s);
-	void ser_members(nazacoin::TransactionOutputTarget &v, ISeria &s);
-	void ser_members(nazacoin::CoinbaseInput &v, ISeria &s);
-	void ser_members(nazacoin::KeyInput &v, ISeria &s);
-	void ser_members(nazacoin::KeyOutput &v, ISeria &s);
-	void ser_members(nazacoin::TransactionPrefix &v, ISeria &s);
-	void ser_members(nazacoin::BaseTransaction &v, ISeria &s);
-	void ser_members(nazacoin::Transaction &v, ISeria &s);
-	void ser_members(nazacoin::BlockTemplate &v, ISeria &s);
-	void ser_members(nazacoin::BlockHeader &v, ISeria &s);
-	void ser_members(nazacoin::ParentBlock &v, ISeria &s);
-	void ser_members(nazacoin::RawBlock &v, ISeria &s);
-	void ser_members(nazacoin::Block &v, ISeria &s);
+	void ser(cryonerocoin::Hash &v, ISeria &s);
+	void ser(cryonerocoin::KeyImage &v, ISeria &s);
+	void ser(cryonerocoin::PublicKey &v, ISeria &s);
+	void ser(cryonerocoin::SecretKey &v, ISeria &s);
+	void ser(cryonerocoin::KeyDerivation &v, ISeria &s);
+	void ser(cryonerocoin::Signature &v, ISeria &s);
+	void ser_members(cryonerocoin::AccountPublicAddress &v, ISeria &s);
+	void ser_members(cryonerocoin::SendProof &v, ISeria &s);
+	void ser_members(cryonerocoin::TransactionInput &v, ISeria &s);
+	void ser_members(cryonerocoin::TransactionOutput &v, ISeria &s);
+	void ser_members(cryonerocoin::TransactionOutputTarget &v, ISeria &s);
+	void ser_members(cryonerocoin::CoinbaseInput &v, ISeria &s);
+	void ser_members(cryonerocoin::KeyInput &v, ISeria &s);
+	void ser_members(cryonerocoin::KeyOutput &v, ISeria &s);
+	void ser_members(cryonerocoin::TransactionPrefix &v, ISeria &s);
+	void ser_members(cryonerocoin::BaseTransaction &v, ISeria &s);
+	void ser_members(cryonerocoin::Transaction &v, ISeria &s);
+	void ser_members(cryonerocoin::BlockTemplate &v, ISeria &s);
+	void ser_members(cryonerocoin::BlockHeader &v, ISeria &s);
+	void ser_members(cryonerocoin::ParentBlock &v, ISeria &s);
+	void ser_members(cryonerocoin::RawBlock &v, ISeria &s);
+	void ser_members(cryonerocoin::Block &v, ISeria &s);
 }

@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "Config.hpp"
@@ -13,30 +13,30 @@
 #include "platform/PathTools.hpp"
 #include "platform/Time.hpp"
 
-static void parse_peer_and_add_to_container(const std::string &str, std::vector<nazacoin::NetworkAddress> &container) {
-	nazacoin::NetworkAddress na{};
+static void parse_peer_and_add_to_container(const std::string &str, std::vector<cryonerocoin::NetworkAddress> &container) {
+	cryonerocoin::NetworkAddress na{};
 	if (!common::parse_ip_address_and_port(str, &na.ip, &na.port))
 		throw std::runtime_error("Wrong address format " + str + ", should be ip:port");
 	container.push_back(na);
 }
 
 using namespace common;
-using namespace nazacoin;
+using namespace cryonerocoin;
 
-const static UUID NAZACOIN_NETWORK = {{0xAE, 0x33, 0x2B, 0x0C, 0x3D, 0x45, 0x61, 0x52, 0x1A, 0x26, 0xEE, 0xDA, 0x1C, 0x43, 0xE4, 0xB3}};  // Bender's nightmare
+const static UUID CRYONERO_NETWORK = {{0xAE, 0x33, 0x2B, 0x0C, 0x3D, 0x45, 0x61, 0x52, 0x1A, 0x26, 0xEE, 0xDA, 0x1C, 0x43, 0xE4, 0xB3}};  // Bender's nightmare
 Config::Config(common::CommandLine &cmd)
     : is_testnet(cmd.get_bool("--testnet"))
     , blocks_file_name(parameters::CRYPTONOTE_BLOCKS_FILENAME)
     , block_indexes_file_name(parameters::CRYPTONOTE_BLOCKINDEXES_FILENAME)
     , crypto_note_name(CRYPTONOTE_NAME)
-    , network_id(NAZACOIN_NETWORK)
+    , network_id(CRYONERO_NETWORK)
     , p2p_bind_port(P2P_DEFAULT_PORT)
     , p2p_external_port(P2P_DEFAULT_PORT)
     , p2p_bind_ip("0.0.0.0")
-    , nazad_bind_port(RPC_DEFAULT_PORT)
-    , nazad_bind_ip("127.0.0.1") 
-    , nazad_remote_port(0)
-    , nazad_remote_ip("127.0.0.1")
+    , cryonerod_bind_port(RPC_DEFAULT_PORT)
+    , cryonerod_bind_ip("127.0.0.1") 
+    , cryonerod_remote_port(0)
+    , cryonerod_remote_ip("127.0.0.1")
     , walletd_bind_port(WALLET_RPC_DEFAULT_PORT)
     , walletd_bind_ip("127.0.0.1")  
     , p2p_local_white_list_limit(P2P_LOCAL_WHITE_PEERLIST_LIMIT)
@@ -54,7 +54,7 @@ Config::Config(common::CommandLine &cmd)
 		network_id.data[0] += 1;
 		p2p_bind_port += 1000;
 		p2p_external_port += 1000;
-		nazad_bind_port += 1000;
+		cryonerod_bind_port += 1000;
 		p2p_allow_local_ip = true;
 		if (const char *pa = cmd.get("--time-multiplier"))
 			platform::set_time_multiplier_for_tests(boost::lexical_cast<int>(pa));
@@ -84,10 +84,10 @@ Config::Config(common::CommandLine &cmd)
 #endif
 	}
 	if (const char *pa = cmd.get("--rpc-authorization")) {
-		nazad_authorization = common::base64::encode(BinaryArray(pa, pa + strlen(pa)));
+		cryonerod_authorization = common::base64::encode(BinaryArray(pa, pa + strlen(pa)));
 	}
 	if (const char *pa = cmd.get("--daemon-rpc-bind-address")) {
-		if (!common::parse_ip_address_and_port(pa, &nazad_bind_ip, &nazad_bind_port))
+		if (!common::parse_ip_address_and_port(pa, &cryonerod_bind_ip, &cryonerod_bind_port))
 			throw std::runtime_error("Wrong address format " + std::string(pa) + ", should be ip:port");
 	}
 	if (const char *pa = cmd.get("--daemon-remote-address")) {
@@ -103,13 +103,13 @@ Config::Config(common::CommandLine &cmd)
 			if (!split_string(addr.substr(prefix.size()), ":", sip, sport))
 				throw std::runtime_error(
 				    "Wrong address format " + addr + ", should be <ip>:<port> or https://<host>:<port>");
-			nazad_remote_port = boost::lexical_cast<uint16_t>(sport);
-			nazad_remote_ip   = prefix + sip;
+			cryonerod_remote_port = boost::lexical_cast<uint16_t>(sport);
+			cryonerod_remote_ip   = prefix + sip;
 		} else {
 			const std::string prefix2 = "http://";
 			if (addr.find(prefix2) == 0)
 				addr = addr.substr(prefix2.size());
-			if (!common::parse_ip_address_and_port(addr, &nazad_remote_ip, &nazad_remote_port))
+			if (!common::parse_ip_address_and_port(addr, &cryonerod_remote_ip, &cryonerod_remote_port))
 				throw std::runtime_error("Wrong address format " + addr + ", should be ip:port");
 		}
 	}
@@ -129,7 +129,7 @@ Config::Config(common::CommandLine &cmd)
 		parse_peer_and_add_to_container(pa, exclusive_nodes);
 
 	if (seed_nodes.empty() && !is_testnet)
-		for (auto &&sn : nazacoin::SEED_NODES) {
+		for (auto &&sn : cryonerocoin::SEED_NODES) {
 			NetworkAddress addr;
 			if (!common::parse_ip_address_and_port(sn, &addr.ip, &addr.port))
 				continue;

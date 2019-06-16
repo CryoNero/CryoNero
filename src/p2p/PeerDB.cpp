@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "PeerDB.hpp"
@@ -17,7 +17,7 @@
 #include "crypto/crypto.hpp"
 #include "seria/ISeria.hpp"
 
-using namespace nazacoin;
+using namespace cryonerocoin;
 using namespace platform;
 
 namespace seria {

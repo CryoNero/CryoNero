@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2018, The CryptoNote developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
-// Copyright (c) 2018-2019, The Naza developers.
+// Copyright (c) 2019, The Cryonero developers.
 // Licensed under the GNU Lesser General Public License. See LICENSE for details.
 
 #include "WalletSerializationV1.hpp"
@@ -65,7 +65,7 @@ namespace {
 		return cipher;
 	}
 
-	std::string decrypt(const std::string &cipher, nazacoin::WalletSerializerV1::CryptoContext &crypto_ctx) {
+	std::string decrypt(const std::string &cipher, cryonerocoin::WalletSerializerV1::CryptoContext &crypto_ctx) {
 		std::string plain;
 		plain.resize(cipher.size());
 
@@ -82,7 +82,7 @@ namespace {
 
 	template<typename Object>
 	void deserialize_encrypted(Object &obj, const std::string &name,
-		nazacoin::WalletSerializerV1::CryptoContext &crypto_ctx, common::IInputStream &source) {
+		cryonerocoin::WalletSerializerV1::CryptoContext &crypto_ctx, common::IInputStream &source) {
 		std::string cipher = read_cipher(source, name);
 		std::string plain = decrypt(cipher, crypto_ctx);
 
@@ -109,7 +109,7 @@ namespace seria {
 	}
 }
 
-namespace nazacoin {
+namespace cryonerocoin {
 
 	const uint32_t WalletSerializerV1::SERIALIZATION_VERSION = 5;
 
@@ -280,4 +280,4 @@ namespace nazacoin {
 		}
 	}
 
-}  // namespace nazacoin
+}  // namespace cryonerocoin
