@@ -18,10 +18,10 @@ namespace cryonerocoin
 
 		const uint64_t CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 126;
 
-		const uint32_t DIFFICULTY_TARGET = 120;
-		const uint64_t DIFFICULTY_WINDOW_V2 = 120;
+		const uint32_t DIFFICULTY_TARGET = 60;
+		const uint64_t DIFFICULTY_WINDOW_V2 = 60;
 		const uint64_t DIFFICULTY_BLOCKS_COUNT_V2 = DIFFICULTY_WINDOW_V2 + 1;
-		const uint64_t DIFFICULTY_SCATTER_V2 = 64;
+		const uint64_t DIFFICULTY_SCATTER_V2 = 32;
 
 
 		const uint32_t BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW_V2 = 11;
@@ -129,6 +129,6 @@ namespace cryonerocoin
 
 	constexpr const CheckpointData CHECKPOINTS[] =
 	{
-	//	{7100, "57319d5fda1e7c573abaa9b75bffbb02ead36b6f9a84fd9557cdfa22de071f16"}
+		// {7100, "57319d5fda1e7c573abaa9b75bffbb02ead36b6f9a84fd9557cdfa22de071f16"}
 	};
 }

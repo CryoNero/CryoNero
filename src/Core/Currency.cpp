@@ -93,7 +93,7 @@ Currency::Currency(bool is_testnet)
 		upgrade_height_v2 = 0;
 		upgrade_height_v3 = static_cast<Height>(-1);
 	}
-	std::string genesis_coinbase_tx_hex =   "";
+	std::string genesis_coinbase_tx_hex =   "010a01ff0001ffffffffffff3f029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd088071210152bfaef5e5681a5d7eaeaca878d53ed2a80445e4f6adc5550fc4b4b0e69b765a";
 
 	BinaryArray miner_tx_blob;
 
